@@ -7,6 +7,8 @@
 #heading {
     padding-top: 0;
     padding-bottom: 0;
+    background-color: #337ab7;
+    color: white;
 }
 
 .sidemenu {

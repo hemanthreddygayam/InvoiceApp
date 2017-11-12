@@ -17,14 +17,11 @@ namespace InvoiceApplication.Services
         public Task<bool> ValidateCredentials(string username, string password, out Btsuser user)
         {
             user = null;
-            var verifyUser = _context.Btsuser.FirstOrDefault(e => e.UserName == username && e.IsActive == true);
+            var verifyUser = _context.Btsuser.FirstOrDefault(e => e.UserName == username && e.Password == password && e.IsActive == true);
             if (verifyUser != null)
             {
-                if (BCrypt.Net.BCrypt.Verify(password, verifyUser.Password)) //Verify Password
-                {
-                    user = verifyUser;
-                    return Task.FromResult(true);
-                }
+                user = verifyUser;
+                return Task.FromResult(true);
             }
             return Task.FromResult(false);
         }

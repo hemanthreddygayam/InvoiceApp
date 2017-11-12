@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace InvoiceApplication.Services
 {
-    interface IUserService
+    public interface IUserService
     {
         Task<bool> ValidateCredentials(string username, string password, out Btsuser user);
     }

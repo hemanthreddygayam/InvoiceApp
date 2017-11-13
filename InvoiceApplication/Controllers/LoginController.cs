@@ -9,6 +9,7 @@ using InvoiceApplication.Models;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
+using System.Web;
 
 namespace InvoiceApplication.Controllers
 {
@@ -23,18 +24,22 @@ namespace InvoiceApplication.Controllers
             _userService = userService;
         }
 
-        public IActionResult SignIn()
+        public IActionResult SignIn(String returnUrl)
         {
-            if (User.Identity.IsAuthenticated)
+            if (Url.IsLocalUrl(returnUrl) && !string.IsNullOrEmpty(returnUrl))
             {
-                return RedirectToAction("Index", "Home");
+                if (User.Identity.IsAuthenticated)
+                {
+                    return Redirect(returnUrl);
+                }
+                ViewBag.ReturnUrl = returnUrl;
             }
             return View();
         }
         // GET: /<controller>/
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> SignIn(SignIn model)
+        public async Task<IActionResult> SignIn(SignIn model, string returnUrl=null)
         {
             if (ModelState.IsValid)
             {
@@ -42,6 +47,10 @@ namespace InvoiceApplication.Controllers
                 if (await _userService.ValidateCredentials(model.Username, model.Password, out user))
                 {
                     await SignInUser(user);
+                    if(!string.IsNullOrEmpty(returnUrl))
+                    {
+                        return Redirect(returnUrl);
+                    }
                     return RedirectToAction("Index", "Home");
                 }
             }
@@ -52,8 +61,8 @@ namespace InvoiceApplication.Controllers
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, user.UserName),
-                new Claim("UserName", user.UserName.ToString())
+                new Claim(ClaimTypes.NameIdentifier, user.UserName.ToString()),
+                new Claim(ClaimTypes.Name, user.UserId.ToString())
             };
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme, "name", null);
             var principal = new ClaimsPrincipal(identity);

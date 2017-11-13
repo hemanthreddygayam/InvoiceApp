@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using InvoiceApplication.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 
 namespace InvoiceApplication
 {
@@ -41,6 +42,8 @@ namespace InvoiceApplication
                 .AddCookie(options =>
                 {
                     options.LoginPath = "/Login/SignIn";
+                    options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+                    options.ReturnUrlParameter = CookieAuthenticationDefaults.ReturnUrlParameter;
                     options.AccessDeniedPath = "/Login/AccessDenied";
                 });
             services.AddAuthorization(options =>
@@ -70,14 +73,14 @@ namespace InvoiceApplication
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-
+            app.UseAuthentication();
             app.UseStaticFiles();
 
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Login}/{action=SignIn}/{id?}");
+                    template: "{controller=Invoices}/{action=Index}/{id?}");
             });
         }
     }

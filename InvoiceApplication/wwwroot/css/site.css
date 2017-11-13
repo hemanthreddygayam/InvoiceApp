@@ -18,3 +18,23 @@
 .aligncenter {
     text-align: center
 }
+
+.right {
+    float: right;
+}
+
+
+.viewer {
+    width: 100%;
+    height: 400px;
+}
+
+.anchor {
+    color: white;
+    text-decoration: none;
+}
+
+.anchor:hover {
+    color: white;
+    text-decoration: none;
+}

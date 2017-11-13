@@ -1,27 +1,29 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using InvoiceApplication.Models;
 using InvoiceApplication.DbModels;
 using Microsoft.AspNetCore.Authorization;
+using InvoiceApplication.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace InvoiceApplication.Controllers
 {
-    public class CheckingAuthorityController : Controller
+    public class ApproverAuthorityController : Controller
     {
         public TrackingDbContext _context;
 
-        public CheckingAuthorityController(TrackingDbContext context)
+        public ApproverAuthorityController(TrackingDbContext context)
         {
             _context = context;
         }
-        
+
         [HttpGet]
-        [Authorize(Policy = "")]
+        [Authorize(Policy = "Approver")]
         public IActionResult Index(int invoiceId)
         {
-            
+
 
             var invoices = from invoice in _context.BtsinvoiceAr
                            where invoice.InvoiceId == invoiceId
@@ -42,7 +44,7 @@ namespace InvoiceApplication.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy ="")]
+        [Authorize(Policy = "")]
         public IActionResult Index(InvoiceApprovalModel model)
         {
             if (model == null)
@@ -63,22 +65,22 @@ namespace InvoiceApplication.Controllers
             var InvoiceApprove = modifyinvoice.First();
             if (status == "Pending")
             {
-                InvoiceApprove.IsCheckedPending = true;
-                InvoiceApprove.CheckedBy = "";
-                InvoiceApprove.CheckedDate = DateTime.Now.ToString();
+                InvoiceApprove.IsApprovalPending = true;
+                InvoiceApprove.ApprovedBy = "";
+                InvoiceApprove.ApprovedDate = DateTime.Now.ToString();
 
             }
             else if (status == "Approved")
             {
-                InvoiceApprove.IsChecked = true;
-                InvoiceApprove.CheckedBy = "";
-                InvoiceApprove.CheckedDate = DateTime.Now.ToString();
+                InvoiceApprove.IsApproved = true;
+                InvoiceApprove.ApprovedBy = "";
+                InvoiceApprove.ApprovedDate = DateTime.Now.ToString();
             }
             else if (status == "Rejected")
             {
                 InvoiceApprove.IsWaitingApproval = false;
-                InvoiceApprove.CheckedBy = "";
-                InvoiceApprove.CheckedDate = DateTime.Now.ToString();
+                InvoiceApprove.ApprovedBy = "";
+                InvoiceApprove.ApprovedDate = DateTime.Now.ToString();
             }
             else
             {

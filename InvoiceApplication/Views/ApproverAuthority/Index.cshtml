@@ -1,0 +1,51 @@
+﻿@model InvoiceApplication.Models.InvoiceViewModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Approve Travel Claim</h2>
+<div class="row" style="margin-right:5px">
+    <label>Invoice Id:</label>
+    @Html.DisplayText(Model.invoiceId.ToString())
+</div>
+<div class="row" style="margin-right:5px">
+    <label>Customer Id:</label>
+    @Html.DisplayText(Model.customerId.ToString())
+</div>
+<div class="row" style="margin-right:5px">
+    <label>Customer Name:</label>
+    @Html.DisplayText(Model.CustomerName)
+</div>
+<div class="row" style="margin-right:5px">
+    <label>Due Date:</label>
+    @Html.DisplayText(Model.DueDate.Date.ToString())
+</div>
+<div class="row" style="margin-right:5px">
+    <label>Delivary Date:</label>
+    @Html.DisplayText(Model.DelivaryDate.ToString())
+</div>
+<div class="row" style="margin-right:5px">
+    <label>Total Amount:</label>
+    @Html.DisplayText(Model.Amount.ToString())
+</div>
+<div class="row" style="margin-right:5px">
+    <label>Exchange Currency:</label>
+    @Html.DisplayText(Model.currencyCode)
+</div>
+<div class="row" style="margin-right:5px">
+    <label>Exchange Rate:</label>
+    @Html.DisplayText(Model.exchangeRate.ToString())
+</div>
+<div class="row" style="margin-right:5px">
+    <label>Total Local Amount:</label>
+    @Html.DisplayText(Model.totalLocalAmount.ToString())
+</div>
+<div class="row" style="margin-right:1px">
+    <button type="button" id="approveCat2" class="btn btn-success">Approve</button>
+    <button type="button" id="declineCat2" class="btn btn-danger">Reject</button>
+    <button type="button" id="warningCat2" class="btn btn-warning">Pending</button>
+</div>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/Approval.js"></script>

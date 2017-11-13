@@ -19,9 +19,8 @@ namespace InvoiceApplication.Services
 
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, ApproverRequirement requirement)
         {
-            var employee_email = context.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            //var employee = _context.Hremployee.FirstOrDefault(e => e.EmployeeEmail == employee_email.ToString());
-            if (_context.Btsuser.Where(e => e.UserName == employee_email).Any(e => e.CategoryId == 2))
+            var username = context.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            if (_context.Btsuser.Where(e => e.UserName == username).Any(e => e.CategoryId == 2))
             {
                 context.Succeed(requirement);
             }

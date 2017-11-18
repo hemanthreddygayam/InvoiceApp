@@ -1,49 +1,50 @@
 ﻿$(document).ready(function () {
 
     $("#approve").click(function () {
-        var claimId = $("#claimId").val();
+        var invoiceId = $("#element td:nth-child(2)").text();
         var status = "Approved";
         var url = "/CheckingAuthority/Index";
 
-        doPostcall(claimId, status,url);
+        doPostcall(invoiceId, status,url);
     });
 
+    
     $("#decline").click(function () {
-        var claimId = $("#claimId").val();
+        var invoiceId = $("#element td:nth-child(2)").text();
         var status = "Rejected";
         var url = "/CheckingAuthority/Index";
 
-        doPostcall(claimId, status,url);
+        doPostcall(invoiceId, status,url);
     });
     $("#warning").click(function () {
-        var claimId = $("#claimId").val();
+        var invoiceId = $("#element td:nth-child(2)").text();
         var status = "Pending";
         var url = "/CheckingAuthority/Index";
 
-        doPostcall(claimId, status);
+        doPostcall(invoiceId, status);
     });
 
 
     $("#approveCat2").click(function () {
-        var claimId = $("#claimId").val();
+        var invoiceId = $("#element td:nth-child(2)").text();
         var status = "Approved";
         var url = "/ApproverAuthority/Index";
 
-        doPostcall(claimId, status,url);
+        doPostcall(invoiceId, status,url);
     });
 
     $("#declineCat2").click(function () {
-        var claimId = $("#claimId").val();
+        var invoiceId = $("#element td:nth-child(2)").text();
         var status = "Rejected";
         var url = "/ApproverAuthority/Index";
-        doPostcall(claimId, status,url);
+        doPostcall(invoiceId, status,url);
     });
     $("#warningCat2").click(function () {
-        var InvoiceId = $("#claimId").val();
+        var invoiceId = $("#element td:nth-child(2)").text();
         var status = "Pending";
         var url = "/ApproverAuthority/Index";
 
-        doPostcall(claimId, status,url);
+        doPostcall(invoiceId, status,url);
     });
 
 
@@ -56,14 +57,11 @@
         var updateStatus = $.ajax({
             type: "POST",
             url: url1,
-            data: data,
-            success: function (data) {
-
-            },
+            data: data
            
         });
-        updateStatus.fail(function () {
-
+        updateStatus.success(function () {
+            alert("Sucess");
         })
     }
 

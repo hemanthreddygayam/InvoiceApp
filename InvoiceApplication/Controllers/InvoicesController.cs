@@ -21,6 +21,7 @@ namespace InvoiceApplication.Controllers
         [Authorize]
         public IActionResult Index(int id = 1)
         {
+            
             ViewBag.Name = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             IEnumerable<VesselDocuments> documents = _context.VesselDocuments.Where(doc => doc.InvoiceId == id);
             return View(documents);

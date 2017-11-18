@@ -1,4 +1,5 @@
-﻿using InvoiceApplication.DbModels;
+﻿using InvoiceApplication.DataAccessLayer;
+using InvoiceApplication.DbModels;
 using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
@@ -10,19 +11,23 @@ namespace InvoiceApplication.Services
 {
     public class IsCheckingAuthority : AuthorizationHandler<CheckingAuthorityRequirement>
     {
-        private TrackingDbContext _context;
-
-        public IsCheckingAuthority(TrackingDbContext context)
+        public DbHelper _helper;
+        public IsCheckingAuthority()
         {
-            _context = context;
+            _helper = new DbHelper();
         }
 
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, CheckingAuthorityRequirement requirement)
         {
-            var username = context.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            if (_context.Btsuser.Where(e => e.UserName == username).Any(e => e.CategoryId == 1))
+            if (context.User.FindFirst(ClaimTypes.NameIdentifier) != null)
             {
-                context.Succeed(requirement);
+                var username = context.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                IDBService service = new DBservice(_helper);
+                var user = service.FetchUser(username);
+                if (user != null && user.CategoryId == 1)
+                {
+                    context.Succeed(requirement);
+                }
             }
             return Task.CompletedTask;
         }

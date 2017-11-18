@@ -5,47 +5,57 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Approve Travel Claim</h2>
-<div class="row" style="margin-right:5px">
-    <label>Invoice Id:</label>
-    @Html.DisplayText(Model.invoiceId.ToString())
+<h2 class="text-center">Approve Invoice</h2>
+<div class="col-sm-12">
+<div class=" col-sm-offset-3 col-sm-6">
+    <table class="table table-striped" style="text-align:center;">
+        <tr id="element" class="table-info">
+            <td>Invoice Id:</td>
+            <td>@Html.Encode(Model.invoiceId.ToString())</td>
+        </tr>
+        <tr class="table-info">
+            <td>Customer Name:</td>
+            <td>@Html.Encode(Model.CustomerName)</td>
+        </tr>
+        <tr class="table-info">
+            <td>Due Date</td>
+            <td>@Html.Encode(Model.DueDate.Date.ToString())</td>
+        </tr>
+        <tr class="table-info">
+            <td>Invoice Id:</td>
+            <td>@Html.Encode(Model.invoiceId.ToString())</td>
+        </tr>
+        <tr class="table-info">
+            <td>Delivary Date:</td>
+            <td>@Html.Encode(Model.DelivaryDate.ToString())</td>
+        </tr>
+
+        <tr class="table-info">
+            <td>Total Amount:</td>
+            <td>@Html.Encode(Model.Amount.ToString())</td>
+        </tr>
+
+        <tr class="table-info">
+            <td>Exchange Currency:</td>
+            <td>@Html.Encode(Model.currencyCode)</td>
+        </tr>
+        <tr class="table-info">
+            <td>Exchange Rate:</td>
+            <td>@Html.Encode(Model.exchangeRate.ToString())</td>
+        </tr>
+        <tr class="table-info">
+            <td>Total Local Amount:</td>
+            <td>@Html.Encode(Model.totalLocalAmount.ToString())</td>
+        </tr>
+    </table>
 </div>
-<div class="row" style="margin-right:5px">
-    <label>Customer Id:</label>
-    @Html.DisplayText(Model.customerId.ToString())
 </div>
-<div class="row" style="margin-right:5px">
-    <label>Customer Name:</label>
-    @Html.DisplayText(Model.CustomerName)
-</div>
-<div class="row" style="margin-right:5px">
-    <label>Due Date:</label>
-    @Html.DisplayText(Model.DueDate.Date.ToString())
-</div>
-<div class="row" style="margin-right:5px">
-    <label>Delivary Date:</label>
-    @Html.DisplayText(Model.DelivaryDate.ToString())
-</div>
-<div class="row" style="margin-right:5px">
-    <label>Total Amount:</label>
-    @Html.DisplayText(Model.Amount.ToString())
-</div>
-<div class="row" style="margin-right:5px">
-    <label>Exchange Currency:</label>
-    @Html.DisplayText(Model.currencyCode)
-</div>
-<div class="row" style="margin-right:5px">
-    <label>Exchange Rate:</label>
-    @Html.DisplayText(Model.exchangeRate.ToString())
-</div>
-<div class="row" style="margin-right:5px">
-    <label>Total Local Amount:</label>
-    @Html.DisplayText(Model.totalLocalAmount.ToString())
-</div>
-<div class="row" style="margin-right:1px">
+<div class="row col-sm-offset-5" style="margin-right:1px">
     <button type="button" id="approveCat2" class="btn btn-success">Approve</button>
     <button type="button" id="declineCat2" class="btn btn-danger">Reject</button>
     <button type="button" id="warningCat2" class="btn btn-warning">Pending</button>
+    <a  href="/Invoices/Index?id=1" type="button" id="viewFiles" class="btn btn-info">ViewFiles</a>
+
 </div>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/js/Approval.js"></script>

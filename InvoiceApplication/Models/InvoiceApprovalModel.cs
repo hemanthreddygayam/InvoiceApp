@@ -7,7 +7,8 @@ namespace InvoiceApplication.Models
 {
     public class InvoiceApprovalModel
     {
-        public string status { get; set; }
+        public string Status { get; set; }
+        public string PreviousStatus { get; set; }
         public long InvoiceId { get; set; }
     }
 }

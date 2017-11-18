@@ -1,4 +1,4 @@
-﻿using InvoiceApplication.DbModels;
+﻿using InvoiceApplication.DataAccessLayer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +8,6 @@ namespace InvoiceApplication.Services
 {
     public interface IUserService
     {
-        Task<bool> ValidateCredentials(string username, string password, out Btsuser user);
+        Task<bool> ValidateCredentials(string username, string password, out DbUserModel user);
     }
 }

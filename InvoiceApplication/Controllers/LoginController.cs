@@ -10,6 +10,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using System.Web;
+using InvoiceApplication.DataAccessLayer;
 
 namespace InvoiceApplication.Controllers
 {
@@ -43,7 +44,7 @@ namespace InvoiceApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                Btsuser user;
+                DbUserModel user;
                 if (await _userService.ValidateCredentials(model.Username, model.Password, out user))
                 {
                     await SignInUser(user);
@@ -57,7 +58,7 @@ namespace InvoiceApplication.Controllers
             return View(model);
         }
 
-        public async Task SignInUser(Btsuser user)
+        public async Task SignInUser(DbUserModel user)
         {
             var claims = new List<Claim>
             {

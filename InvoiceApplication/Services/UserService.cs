@@ -1,4 +1,5 @@
-﻿using InvoiceApplication.DbModels;
+﻿using InvoiceApplication.DataAccessLayer;
+using InvoiceApplication.DbModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,22 +9,23 @@ namespace InvoiceApplication.Services
 {
     public class UserService : IUserService
     {
-        private TrackingDbContext _context;
-
-        public UserService(TrackingDbContext context)
+        public DbHelper dbHelper;
+        public UserService()
         {
-            _context = context;
+            dbHelper = new DbHelper();
         }
-        public Task<bool> ValidateCredentials(string username, string password, out Btsuser user)
+        public Task<bool> ValidateCredentials(string username, string password, out DbUserModel user)
         {
             user = null;
-            var verifyUser = _context.Btsuser.FirstOrDefault(e => e.UserName == username && e.Password == password && e.IsActive == true);
+            IDBService _dbService = new DBservice(dbHelper);
+            var verifyUser =  _dbService.FetchUser(username);
             if (verifyUser != null)
             {
                 user = verifyUser;
                 return Task.FromResult(true);
             }
             return Task.FromResult(false);
+
         }
     }
 }

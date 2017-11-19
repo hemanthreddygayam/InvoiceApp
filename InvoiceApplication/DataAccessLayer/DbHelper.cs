@@ -43,6 +43,28 @@ namespace InvoiceApplication.DataAccessLayer
             return null;
         }
 
+        public string GetEmail(string username, string sql)
+        {
+            string email = null;
+            using (var connection = new SqlConnection("Server=LAPTOP-D8N1NPGG\\MSSQLSERVER1;Database=iCPMS_OMTI_FZ;Integrated Security=True;"))
+            {
+                var command = new SqlCommand(sql, connection);
+                command.Parameters.Add(new SqlParameter("username", username));
+
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+
+                    while (reader.Read())
+                    {
+                        email = (string)reader["Email"];
+
+                    }
+                }
+            }
+            return email;
+        }
+
         public int UpdateStatusForChecker(long invoiceId, char username,string sql)
         {
             int status = 0;

@@ -98,7 +98,20 @@ namespace InvoiceApplication.Controllers
         public IActionResult ViewInvoices()
         {
             ViewBag.Name = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            return View();
+            IDBService service = new DBservice(_helper);
+            var results = service.GetAllInvoices(DateTime.MinValue, DateTime.MinValue,"pending", 10);
+            List<InvoiceViewModel> list = new List<InvoiceViewModel>();
+            foreach (var invoice in results)
+            {
+                InvoiceViewModel model = new InvoiceViewModel();
+                model.invoiceId = invoice.InvoiceId;
+                model.invoiceNumber = invoice.InvoiceNo;
+                model.invoiceDate = invoice.AccountDate;
+                model.exchangeRate = invoice.ExRate;
+                model.totalLocalAmount = invoice.TotalLocalAmt;
+
+            }
+            return View(list.AsEnumerable());
         }
 
         [Authorize]

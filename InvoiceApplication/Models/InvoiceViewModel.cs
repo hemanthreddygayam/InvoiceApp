@@ -19,6 +19,7 @@ namespace InvoiceApplication.Models
         public decimal totalLocalAmount { get; set; }
         public int customerId { get; set; }
         public string CustomerName { get; set; }
+        public DateTime AccountDate { get; set; }
    
        
      

@@ -1,4 +1,5 @@
-﻿
+﻿@model IEnumerable<InvoiceApplication.Models.InvoiceViewModel>
+
 @{
     ViewData["Title"] = "ViewInvoices";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -51,13 +52,32 @@
             <th>
                 Total Amount
             </th>
-            <th>
-                Actions
-            </th>
         </tr>
     </thead>
     <tbody id="invoice-info">
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.invoiceNumber
+                </td>
+                <td>@item.invoiceDate.Date.ToShortDateString()</td>
+                <td>@item.DueDate.ToShortDateString()</td>
+                <td>@item.CustomerName</td>
+                <td>@item.totalLocalAmount</td>
+                <td>
+                    
+                    <a asp-controller="ApproverAuthority"
+                       asp-action="Index"
+                       asp-route-id="@item.invoiceId"
+                       type="button">
+                        View Details
+                    </a>
+                </td>
 
+            </tr>
+
+        }
     </tbody>
-</table>
-<script type="text/javascript" src="~/js/viewapproverinvoices.js"></script>
+    </table>
+    <script type="text/javascript" src="~/js/viewapproverinvoices.js"></script>

@@ -15,12 +15,8 @@ namespace InvoiceApplication.DataAccessLayer
          void UpdatePendingStatusForApprover(long invoiceId, string username);
          void UpdateApprovedStatusForApprover(long invoiceId, string username);
          void UpdateRejectedStatusForApprover(long invoiceId, string username);
-         List<DbInvoiceModel> FetchAllPendingInvoices(DateTime fromDate, DateTime toDate, int numberOfTranscations);
-         List<DbInvoiceModel> FetchAllApprovedInvoices(DateTime fromDate, DateTime toDate, int numberOfTranscations);
-            List<DbInvoiceModel> FetchAllRevertedInvoices(DateTime fromDate, DateTime toDate, int numberOfTranscations);
-
-
-        string GetEmailForUser(string username);
+         List<DbInvoiceModel> GetAllInvoices(DateTime startDate, DateTime endDate, string status,int numberOfRecords);
+         string GetEmailForUser(string username);
 
 
     }
@@ -59,6 +55,48 @@ namespace InvoiceApplication.DataAccessLayer
 
         }
 
+        public List<DbInvoiceModel> GetAllInvoices(DateTime startDate, DateTime endDate, string status, int numberOfRecords)
+        {
+            string sql = @"SELECT InvoiceId,InvoiceNo,InvoiceDate,DueDate,DeliveryDate,CurrencyCode,ExRate,TotalAmt,TotalLocalAmt,CustomerName,InvoiceStatus,AccountDate,
+                           InvStatus = CASE
+                           WHEN( InvoiceStatus = 3 or InvoiceStatus = 6 or InvoiceStatus = 2 ) THEN  1
+                           WHEN( InvoiceStatus = 5) THEN  2
+                           WHEN( InvoiceStatus = 4 or InvoiceStatus = 7 ) THEN 3
+                           ELSE 4 END from BTSInvoiceAR 
+                           Where 1 = 1 ";
+
+            if (status == "pending")
+            {
+                sql += " AND ( InvoiceStatus = 3 or InvoiceStatus = 6 or InvoiceStatus = 2 )";
+            }
+            else if (status == "approved")
+            {
+                sql += " AND (InvoiceStatus = 5 ) ";
+                
+            }
+            else if (status == "rejected")
+            {
+                sql += " AND ( InvoiceStatus = 4 or InvoiceStatus = 7 ) ";
+            }
+            else
+            {
+                
+            }
+            if(startDate != DateTime.MinValue)
+            {
+                sql += " AND ( AccountDate >= @StartDate ) ";
+            }
+            if(endDate != DateTime.MinValue)
+            {
+                sql += " AND ( AccountDate < @EndDate ) ";
+            }
+            sql += " ORDER BY InvStatus ASC, AccountDate DESC ";
+
+            var results = _helper.GetInvoices(sql, startDate, endDate);
+           
+            return results;
+        }
+
         public string GetEmailForUser(string username)
         {
             string sql = "select Email from UserEmail Where username= @username and IsActive = 1";
@@ -68,44 +106,44 @@ namespace InvoiceApplication.DataAccessLayer
 
         public DbInvoiceModel GetInvoice(long invoiceId)
         {
-            string sql = "select InvoiceNo,InvoiceDate,AccountDate,DeliveryDate,DueDate,CurrencyCode,ExRate,CreditTerms,TotalAmt,TotalLocalAmt,CustomerName from BTSInvoiceAR Where InvoiceId = @invoiceId";
+            string sql = "select InvoiceId,InvoiceNo,InvoiceDate,AccountDate,DeliveryDate,DueDate,CurrencyCode,ExRate,CreditTerms,TotalAmt,TotalLocalAmt,CustomerName from BTSInvoiceAR Where InvoiceId = @invoiceId";
             var invoice = _helper.GetInvoiceDetails(invoiceId,sql);
             return invoice;
         }
 
         public void UpdateApprovedStatusForApprover(long invoiceId, string username)
         {
-            string sql = "update BTSInvoiceAR set IsWaitingApproval = 1,IsApproved = 1,IsApprovalPending = 0, IsApprovalReverted =0, ApprovedBy = @username,EditBy=@username,EditDate = @currentDate Where InvoiceId = @invoiceId";
+            string sql = "update BTSInvoiceAR set IsWaitingApproval = 1,IsApproved = 1,IsApprovalPending = 0, IsApprovalReverted =0, InvoiceStatus = 5,ApprovedBy = @username,EditBy=@username,EditDate = @currentDate Where InvoiceId = @invoiceId";
             _helper.UpdateStatusForChecker(invoiceId, 'b', sql);
         }
 
         public void UpdateCheckedStatusForChecker(long invoiceId, string username)
         {
-            string sql = "update BTSInvoiceAR set IsWaitingApproval = 1,IsChecked = 1,IsCheckedPending = 0, CheckedBy = @username,EditBy=@username,EditDate = @currentDate Where InvoiceId = @invoiceId";
+            string sql = "update BTSInvoiceAR set IsWaitingApproval = 1,IsChecked = 1,IsCheckedPending = 0, InvoiceStatus = 2,CheckedBy = @username,EditBy=@username,EditDate = @currentDate Where InvoiceId = @invoiceId";
             _helper.UpdateStatusForChecker(invoiceId, 'b', sql);
         }
 
         public void UpdatePendingStatusForApprover(long invoiceId, string username)
         {
-            string sql = "update BTSInvoiceAR set IsWaitingApproval = 1,IsApproved = 0,IsApprovalPending = 1, IsApprovalReverted = 0, ApprovedBy = @username,EditBy=@username,EditDate = @currentDate Where InvoiceId = @invoiceId";
+            string sql = "update BTSInvoiceAR set IsWaitingApproval = 1,IsApproved = 0,IsApprovalPending = 1, IsApprovalReverted = 0, InvoiceStatus = 6, ApprovedBy = @username,EditBy=@username,EditDate = @currentDate Where InvoiceId = @invoiceId";
             _helper.UpdateStatusForChecker(invoiceId, 'b', sql);
         }
 
         public void UpdatePendingStatusForChecker(long invoiceId,string username)
         {
-            string sql = "update BTSInvoiceAR set IsWaitingApproval = 1,IsCheckedPending = 1,IsChecked = 0, CheckedBy = @username,EditBy=@username,EditDate = @currentDate Where InvoiceId = @invoiceId";
+            string sql = "update BTSInvoiceAR set IsWaitingApproval = 1,IsCheckedPending = 1,IsChecked = 0, InvoiceStatus = 3, CheckedBy = @username,EditBy=@username,EditDate = @currentDate Where InvoiceId = @invoiceId";
             _helper.UpdateStatusForChecker(invoiceId, 'b',sql);
         }
 
         public void UpdateRejectedStatusForApprover(long invoiceId, string username)
         {
-            string sql = "update BTSInvoiceAR set IsWaitingApproval = 0,IsApproved = 0,IsApprovalPending = 0, IsApprovalReverted = 1, ApprovedBy = @username,EditBy=@username,EditDate = @currentDate Where InvoiceId = @invoiceId";
+            string sql = "update BTSInvoiceAR set IsWaitingApproval = 0,IsApproved = 0,IsApprovalPending = 0, IsApprovalReverted = 1, InvoiceStatus = 7, ApprovedBy = @username,EditBy=@username,EditDate = @currentDate Where InvoiceId = @invoiceId";
             _helper.UpdateStatusForChecker(invoiceId, 'b', sql);
         }
 
         public void UpdateRejectedStatusForChecker(long invoiceId, string username)
         {
-            string sql = "update BTSInvoiceAR set IsWaitingApproval = 0,IsCheckedPending = 0,IsChecked = 0,IsCheckingReverted = 1, CheckedBy = @username,EditBy=@username,EditDate = @currentDate Where Innvoiceid = @invoiceId";
+            string sql = "update BTSInvoiceAR set IsWaitingApproval = 0,IsCheckedPending = 0,IsChecked = 0,IsCheckingReverted = 1, InvoiceStatus = 4, CheckedBy = @username,EditBy=@username,EditDate = @currentDate Where Innvoiceid = @invoiceId";
             _helper.UpdateStatusForChecker(invoiceId, 'b',sql);
         }
     }

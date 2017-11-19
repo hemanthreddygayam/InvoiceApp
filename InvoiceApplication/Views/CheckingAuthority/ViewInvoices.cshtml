@@ -1,8 +1,9 @@
-﻿
+﻿@model IEnumerable<InvoiceApplication.Models.InvoiceViewModel>
 @{
     ViewData["Title"] = "ViewInvoices";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 <h2>ViewInvoices</h2>
 <form class="form-inline">
     <div class="form-group">
@@ -54,7 +55,20 @@
         </tr>
     </thead>
     <tbody id="invoice-info">
+        @foreach(var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.invoiceNumber
+                </td>
+                <td>@item.invoiceDate.Date.ToShortDateString()</td>
+                <td>@item.DueDate.ToShortDateString()</td>
+                <td>@item.CustomerName</td>
+                <td>@item.totalLocalAmount</td>
 
+            </tr>
+
+        }
     </tbody>
 </table>
 <script type="text/javascript" src="~/js/viewcheckerinvoices.js"></script>

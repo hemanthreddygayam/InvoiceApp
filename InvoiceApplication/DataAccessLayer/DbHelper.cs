@@ -92,7 +92,54 @@ namespace InvoiceApplication.DataAccessLayer
 
         }
 
-         public  DbInvoiceModel GetInvoiceDetails(long invoiceId, string sql)
+        public List<DbInvoiceModel> GetInvoices(string sql, DateTime startDate, DateTime endDate)
+        {
+            List<DbInvoiceModel> invoices = new List<DbInvoiceModel>();
+            using (var connection = new SqlConnection("Server=LAPTOP-D8N1NPGG\\MSSQLSERVER1;Database=iCPMS_OMTI_FZ;Integrated Security=True;"))
+            {
+                var command = new SqlCommand(sql, connection);
+                if (startDate != null)
+                {
+                    DateTime start = (DateTime)startDate;
+                    command.Parameters.Add(new SqlParameter("@StartDate", System.Data.SqlDbType.DateTime).Value = start);
+
+                }
+                if (endDate != null)
+                {
+                    DateTime end = (DateTime)endDate;
+                    command.Parameters.Add(new SqlParameter("@EndDate", System.Data.SqlDbType.DateTime).Value = end);
+
+                }
+
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    if(reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            DbInvoiceModel model = new DbInvoiceModel();
+                            model.InvoiceId = (long)reader["InvoiceId"];
+                            model.InvoiceNo = (string)reader["InvoiceNo"];
+                            model.CurrencyCode = (string)reader["CurrencyCode"];
+                            model.CustomerName = (string)reader["CustomerName"];
+                            model.DueDate = reader.GetFieldValue<DateTime>(reader.GetOrdinal("DueDate"));
+                            model.DeliveryDate = reader.GetFieldValue<DateTime>(reader.GetOrdinal("DeliveryDate"));
+                            model.TotalAmt = (decimal)reader["TotalAmt"];
+                            model.TotalLocalAmt = (decimal)reader["TotalLocalAmt"];
+                            model.InvoiceDate = reader.GetFieldValue<DateTime>(reader.GetOrdinal("InvoiceDate"));
+                            model.ExRate = (int)reader["ExRate"];
+                            invoices.Add(model);
+                        }
+                    }
+
+                    
+                }
+            }
+            return invoices;
+        }
+
+        public  DbInvoiceModel GetInvoiceDetails(long invoiceId, string sql)
         {
             using (var connection = new SqlConnection("Server=LAPTOP-D8N1NPGG\\MSSQLSERVER1;Database=iCPMS_OMTI_FZ;Integrated Security=True;"))
             {
@@ -106,9 +153,12 @@ namespace InvoiceApplication.DataAccessLayer
                     while (reader.Read())
                     {
                         DbInvoiceModel model = new DbInvoiceModel();
+                        model.InvoiceId = (long)reader["InvoiceId"];
                         model.InvoiceNo = (string)reader["InvoiceNo"];
                         model.CurrencyCode = (string)reader["CurrencyCode"];
                         model.CustomerName = (string)reader["CustomerName"];
+                        model.InvoiceDate = reader.GetFieldValue<DateTime>(reader.GetOrdinal("InvoiceDate"));
+                        model.AccountDate = reader.GetFieldValue<DateTime>(reader.GetOrdinal("AccountDate"));
                         model.DueDate = reader.GetFieldValue<DateTime>(reader.GetOrdinal("DueDate"));
                         model.DeliveryDate = reader.GetFieldValue<DateTime>(reader.GetOrdinal("DeliveryDate"));
                         model.TotalAmt = (decimal)reader["TotalAmt"];

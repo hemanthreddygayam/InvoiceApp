@@ -28,7 +28,7 @@
         var id = $(this).attr('id');
         //Remove text_ from id and return the number
         id = id.substr(5, id.length);
-        if ($(this).html() == '<span class="glyphicon glyphicon-triangle-bottom"></span>Hide File') {
+        if ($(this).html() === '<span class="glyphicon glyphicon-triangle-bottom"></span>Hide File') {
             $(this).html('<span class="glyphicon glyphicon-triangle-top"></span>Show File');
             $('#document_' + id).empty();
         }

@@ -12,6 +12,11 @@ namespace InvoiceApplication.Controllers
 
         public void SendEmail(InvoiceViewModel model,string email)
         {
+            string subject = "Approve ";
+
+        }
+        public StringBuilder ConstructMessage(InvoiceViewModel model)
+        {
             StringBuilder messge = new StringBuilder();
             messge.Append("<html>");
             messge.Append("<table>");
@@ -20,7 +25,7 @@ namespace InvoiceApplication.Controllers
 
             messge.Append("<tr>");
             messge.Append("<td>Invoice Number</td>");
-            messge.Append(String.Format("<td>{0}</td>",model.invoiceNumber));
+            messge.Append(String.Format("<td>{0}</td>", model.invoiceNumber));
             messge.Append("</tr>");
 
             messge.Append("<tr>");
@@ -44,9 +49,11 @@ namespace InvoiceApplication.Controllers
             messge.Append("</tr>");
             string url = "";
             messge.Append("</table>");
-            messge.Append(String.Format("<a> href='{0}'>Approve Invoice</a>",));
+            messge.Append(String.Format("<a> href='{0}'>Approve Invoice</a>", url));
             messge.Append("</html>");
 
+
+            return messge;
         }
     }
 }

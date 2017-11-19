@@ -38,5 +38,8 @@ namespace InvoiceApplication.DataAccessLayer
         public DateTime CreateDate { get; set; }
         public string EditBy { get; set; }
         public DateTime? EditDate { get; set; }
-    }
+        public int InvoiceStatus { get; set; }
+        public int InvStatus { get; set; }
+        }
+    
 }

@@ -27,7 +27,7 @@ namespace InvoiceApplication
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var connection = Configuration.GetConnectionString("EMSDatabase1");
+            var connection = Configuration.GetConnectionString("EMSDatabase");
             services.AddDbContext<TrackingDbContext>(options => options.UseSqlServer(connection));
             services.AddMvc();
             services.AddScoped<IUserService, UserService>();

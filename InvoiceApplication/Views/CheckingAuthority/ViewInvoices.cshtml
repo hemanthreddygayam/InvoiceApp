@@ -1,0 +1,60 @@
+﻿
+@{
+    ViewData["Title"] = "ViewInvoices";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>ViewInvoices</h2>
+<form class="form-inline">
+    <div class="form-group">
+        <label for="status">Status</label>
+        <select id="status" name="status" class="form-control">
+            <option value="all">All</option>
+            <option value="pending">Pending</option>
+            <option value="checked">Checked</option>
+            <option value="approved">Approved</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="from">From</label>
+        <input type="date" class="form-control" id="from">
+    </div>
+    <div class="form-group">
+        <label for="to">To</label>
+        <input type="date" class="form-control" id="to">
+    </div>
+    <div class="form-group">
+        <label for="results">Results</label>
+        <select id="results" name="results" class="form-control">
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+        </select>
+    </div>
+    <button type="button" id="searchinvoice" class="btn btn-primary">Search</button>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Invoice Number
+            </th>
+            <th>
+                Invoice Date
+            </th>
+            <th>
+                Due Date
+            </th>
+            <th>
+                Customer Name
+            </th>
+            <th>
+                Total Amount
+            </th>
+        </tr>
+    </thead>
+    <tbody id="invoice-info">
+
+    </tbody>
+</table>
+<script type="text/javascript" src="~/js/viewcheckerinvoices.js"></script>

@@ -5,9 +5,9 @@ using InvoiceApplication.Models;
 using InvoiceApplication.DbModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Http;
+
 using System.Collections.Generic;
+using System.Security.Claims;
 using InvoiceApplication.DataAccessLayer;
 
 namespace InvoiceApplication.Controllers
@@ -16,7 +16,7 @@ namespace InvoiceApplication.Controllers
     {
         public DbHelper _helper;
 
-        public CheckingAuthorityController(TrackingDbContext context)
+        public CheckingAuthorityController()
         {
             _helper = new DbHelper();
         }
@@ -92,8 +92,60 @@ namespace InvoiceApplication.Controllers
             {
                 throw new Exception("Invalid Status");
             }
+        }
 
-           
+        [Authorize]
+        public IActionResult ViewInvoices()
+        {
+            ViewBag.Name = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            return View();
+        }
+
+        [Authorize]
+        [HttpPost]
+        public JsonResult GetInvoices([FromBody]InvoiceSearchViewModel model)
+        {
+            /*
+            var invoices = _context.BtsinvoiceAr.Where(i => DateTime.Compare(i.InvoiceDate, model.From) >= 0);
+            if(model.Status == "pending")
+            {
+                //invoices = invoices.Where(i => i.IsApprovalPending == true);
+            }
+            if (model.Status == "checked")
+            {
+                //invoices = invoices.Where(i => i.IsChecked == true);
+            }
+            if (model.Status == "Approved")
+            {
+                //invoices = invoices.Where(i => i.IsApproved == true);
+            }
+            //invoices = invoices.Skip(model.Page * model.Results).Take(model.Results);
+            List<InvoiceResults> results = new List<InvoiceResults>();
+            foreach(var invoice in invoices)
+            {
+                InvoiceResults result = new InvoiceResults();
+                result.invoiceId = invoice.InvoiceId;
+                result.invoiceNo = invoice.InvoiceNo;
+                result.invoiceDate = invoice.InvoiceDate;
+                result.dueDate = invoice.DueDate;
+                result.customerName = invoice.CustomerName;
+                result.totalAmt = invoice.TotalAmt;
+                result.currencyCode = invoice.CurrencyCode;
+                results.Add(result);
+            }*/
+            List<InvoiceResults> results = new List<InvoiceResults>();
+
+            InvoiceResults result = new InvoiceResults();
+            result.invoiceId = 123;
+            result.invoiceNo = "N123";
+            result.invoiceDate = DateTime.Now.ToShortDateString();
+            result.dueDate = DateTime.Now.ToShortDateString();
+            result.customerName = "Praveen";
+            result.totalAmt = 10090;
+            result.currencyCode = "USD";
+            results.Add(result);
+
+            return Json(results);
         }
     }
 }

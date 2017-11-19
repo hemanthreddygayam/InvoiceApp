@@ -1,0 +1,36 @@
+﻿@model IEnumerable<InvoiceApplication.DbModels.VesselDocuments>
+@{
+    ViewBag.Title = "View Invoice";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <div class="col-sm-offset-3 col-sm-6">
+        <h2>Invoices</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>File Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+            {
+                    <tr>
+                        <td>@item.FileName</td>
+                        <td><a class="btn btn-primary" data-toggle="collapse" data-target="#document_@item.GetHashCode()">View/Hide</a></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <div id="document_@item.GetHashCode()" class="collapse">
+                                <embed class="viewer" src="@item.FilePath@item.FileName" />
+                            </div>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+    <div class="col-sm-3"></div>
+    <script type="text/javascript" src="~/js/invoices.js"></script>

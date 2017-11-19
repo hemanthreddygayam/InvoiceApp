@@ -22,19 +22,6 @@ namespace InvoiceApplication.Controllers
         public InvoicesController(TrackingDbContext context, IHttpContextAccessor httpContext)
         {
             _context = context;
-<<<<<<< HEAD
-        }
-
-        [Authorize]
-        public IActionResult Index(int id = 1)
-        {
-            
-            ViewBag.Name = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            IEnumerable<VesselDocuments> documents = _context.VesselDocuments.Where(doc => doc.InvoiceId == id);
-            return View(documents);
-        }
-    }
-=======
             _userAgent = httpContext.HttpContext.Request.Headers["User-Agent"].ToString();
         }
 
@@ -61,5 +48,4 @@ namespace InvoiceApplication.Controllers
             return match.Success;
         }
     }
->>>>>>> 768931a30e98d796346d6b52ecc23dd4f52caa05
 }

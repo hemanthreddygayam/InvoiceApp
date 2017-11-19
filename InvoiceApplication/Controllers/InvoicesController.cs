@@ -34,6 +34,7 @@ namespace InvoiceApplication.Controllers
             return View(documents);
         }
 
+        [Authorize]
         [HttpPost]
         public JsonResult GetFilePath([FromBody]int id)
         {

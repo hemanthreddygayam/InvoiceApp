@@ -36,6 +36,7 @@
             $('.toggler').each(function () {
                 $(this).html('<span class="glyphicon glyphicon-triangle-top"></span>Show File');
             });
+
             $('.fileviewer').each(function () {
                 $(this).empty();
             });

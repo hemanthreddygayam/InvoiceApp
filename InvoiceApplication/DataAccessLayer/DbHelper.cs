@@ -98,16 +98,16 @@ namespace InvoiceApplication.DataAccessLayer
             using (var connection = new SqlConnection("Server=LAPTOP-D8N1NPGG\\MSSQLSERVER1;Database=iCPMS_OMTI_FZ;Integrated Security=True;"))
             {
                 var command = new SqlCommand(sql, connection);
-                if (startDate != null)
+                if (startDate != DateTime.MinValue)
                 {
                     DateTime start = (DateTime)startDate;
-                    command.Parameters.Add(new SqlParameter("@StartDate", System.Data.SqlDbType.DateTime).Value = start);
+                    command.Parameters.Add(new SqlParameter("@StartDate", startDate));
 
                 }
-                if (endDate != null)
+                if (endDate != DateTime.MinValue)
                 {
                     DateTime end = (DateTime)endDate;
-                    command.Parameters.Add(new SqlParameter("@EndDate", System.Data.SqlDbType.DateTime).Value = end);
+                    command.Parameters.Add(new SqlParameter("@EndDate", endDate));
 
                 }
 

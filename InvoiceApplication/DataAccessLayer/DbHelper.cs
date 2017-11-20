@@ -123,6 +123,7 @@ namespace InvoiceApplication.DataAccessLayer
                             model.InvoiceNo = (string)reader["InvoiceNo"];
                             model.CurrencyCode = (string)reader["CurrencyCode"];
                             model.CustomerName = (string)reader["CustomerName"];
+                            model.AccountDate = reader.GetFieldValue<DateTime>(reader.GetOrdinal("AccountDate"));
                             model.DueDate = reader.GetFieldValue<DateTime>(reader.GetOrdinal("DueDate"));
                             model.DeliveryDate = reader.GetFieldValue<DateTime>(reader.GetOrdinal("DeliveryDate"));
                             model.TotalAmt = (decimal)reader["TotalAmt"];

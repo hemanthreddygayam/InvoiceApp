@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2 class="text-center">Approve Invoice</h2>
+<h2 class="text-center">Invoice Details</h2>
 <div class="col-sm-12">
 <div class=" col-sm-offset-3 col-sm-6">
     <table class="table table-striped" style="text-align:center;">
@@ -51,9 +51,9 @@
 </div>
 </div>
 <div class="row col-sm-offset-5" style="margin-right:1px">
-    <button type="button" id="approveCat2" class="btn btn-success">Approve</button>
-    <button type="button" id="declineCat2" class="btn btn-danger">Reject</button>
-    <button type="button" id="warningCat2" class="btn btn-warning">Pending</button>
+    <button type="button" id="approveCat2" class="btn btn-success" style="@(Model.showbuttons ? "display:block" : "display:none")">Approve</button>
+    <button type="button" id="declineCat2" class="btn btn-danger" style="@(Model.showbuttons ? "display:block" : "display:none")">Reject</button>
+    <button type="button" id="warningCat2" class="btn btn-warning" style="@(Model.showbuttons ? "display:block" : "display:none")">Pending</button>
     <a  href="/Invoices/Index?id=1" type="button" id="viewFiles" class="btn btn-info">ViewFiles</a>
 
 </div>

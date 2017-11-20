@@ -106,7 +106,7 @@ namespace InvoiceApplication.DataAccessLayer
 
         public DbInvoiceModel GetInvoice(long invoiceId)
         {
-            string sql = "select InvoiceId,InvoiceNo,InvoiceDate,AccountDate,DeliveryDate,DueDate,CurrencyCode,ExRate,CreditTerms,TotalAmt,TotalLocalAmt,CustomerName from BTSInvoiceAR Where InvoiceId = @invoiceId";
+            string sql = "select InvoiceId,InvoiceNo,InvoiceDate,AccountDate,DeliveryDate,DueDate,CurrencyCode,ExRate,CreditTerms,TotalAmt,TotalLocalAmt,CustomerName, InvoiceStatus from BTSInvoiceAR Where InvoiceId = @invoiceId";
             var invoice = _helper.GetInvoiceDetails(invoiceId,sql);
             return invoice;
         }

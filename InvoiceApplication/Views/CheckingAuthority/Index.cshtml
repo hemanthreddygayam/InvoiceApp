@@ -56,9 +56,9 @@
     <div class="col-sm-offset-2 col-sm-1"></div>
 </div>
     <div class="row col-sm-offset-5" style="margin-right:1px">
-        <button type="button" id="approve" class="btn btn-success">Check</button>
-        <button type="button" id="decline" class="btn btn-danger">Reject</button>
-        <button type="button" id="warning" class="btn btn-warning">Pending</button>
+        <button type="button" id="approve" class="btn btn-success" style="@(Model.showbuttons ? "display:block" : "display:none")">Check</button>
+        <button type="button" id="decline" class="btn btn-danger" style="@(Model.showbuttons ? "display:block" : "display:none")">Reject</button>
+        <button type="button" id="warning" class="btn btn-warning" style="@(Model.showbuttons ? "display:block" : "display:none")">Pending</button>
         <a href="/Invoices/Index?id=1" type="button" id="viewFiles" class="btn btn-info">ViewFiles</a>
     </div>
 

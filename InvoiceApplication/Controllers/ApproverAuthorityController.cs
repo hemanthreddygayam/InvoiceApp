@@ -43,7 +43,11 @@ namespace InvoiceApplication.Controllers
             model.currencyCode = invoices.CurrencyCode;
             model.Amount = invoices.TotalAmt;
             model.AccountDate = invoices.AccountDate;
-            
+            if (invoices.InvoiceStatus <= 4)
+            {
+                model.showbuttons = true;
+            }
+
             return View(model);
         }
 

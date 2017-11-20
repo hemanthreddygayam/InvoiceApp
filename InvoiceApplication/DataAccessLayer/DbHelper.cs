@@ -92,6 +92,62 @@ namespace InvoiceApplication.DataAccessLayer
 
         }
 
+        public List<DbVesselDocument> FetchDocumentDetails(string sql, long id)
+        {
+            List<DbVesselDocument> documents = new List<DbVesselDocument>();
+            using (var connection = new SqlConnection("Server=LAPTOP-D8N1NPGG\\MSSQLSERVER1;Database=iCPMS_OMTI_FZ;Integrated Security=True;"))
+            {
+                var command = new SqlCommand(sql, connection);
+                command.Parameters.Add(new SqlParameter("invoiceId", id));
+
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            DbVesselDocument doc = new DbVesselDocument();
+                            doc.FileId = (int)reader["FileId"];
+                            doc.InvoiceId = (long)reader["InvoiceId"];
+                            doc.FilePath = (string)reader["FilePath"];
+                            doc.FileName = (string)reader["FileName"];
+                            documents.Add(doc);
+                        }
+                    }
+                }
+            }
+            return documents;
+        }
+
+        public  DbVesselDocument FetchFileDetails(string sql, int id)
+        {
+            DbVesselDocument doc = null;
+            using (var connection = new SqlConnection("Server=LAPTOP-D8N1NPGG\\MSSQLSERVER1;Database=iCPMS_OMTI_FZ;Integrated Security=True;"))
+            {
+                var command = new SqlCommand(sql, connection);
+                command.Parameters.Add(new SqlParameter("fileId", id));
+
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            doc = new DbVesselDocument();
+                            doc.FileId = (int)reader["FileId"];
+                            doc.InvoiceId = (long)reader["InvoiceId"];
+                            doc.FilePath = (string)reader["FilePath"];
+                            doc.FileName = (string)reader["FileName"];
+                            
+                        }
+                    }
+                }
+            }
+            return doc;
+        }
+
         public List<DbInvoiceModel> GetInvoices(string sql, DateTime startDate, DateTime endDate)
         {
             List<DbInvoiceModel> invoices = new List<DbInvoiceModel>();
@@ -167,6 +223,8 @@ namespace InvoiceApplication.DataAccessLayer
                         model.InvoiceDate = reader.GetFieldValue<DateTime>(reader.GetOrdinal("InvoiceDate"));
                         model.ExRate = (int)reader["ExRate"];
                         model.CreditTerms = (string)reader["CreditTerms"];
+                        model.InvoiceStatus = (int)reader["InvoiceStatus"];
+
                         return model;
                     }
                 }

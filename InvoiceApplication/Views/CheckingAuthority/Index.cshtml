@@ -12,7 +12,7 @@
 <div class="col-sm-12">
     <div class="col-sm-offset-2 col-sm-1"></div>
     <div class="col-sm-6">
-        <table class="table table-striped" style="text-align:center;">
+        <table id="info" class="table table-striped" style="text-align:center;">
             <tr id="element" class="table-info" style="display:none">
                 <td>Invoice Id:</td>
                 <td>@Html.Encode(Model.invoiceId.ToString())</td>
@@ -27,7 +27,7 @@
             </tr>
             <tr class="table-info">
                 <td>Due Date</td>
-                <td>@Html.Encode(Model.DueDate.Date.ToString())</td>
+                <td>@Html.Encode(Model.AccountDate.Date.ToString())</td>
             </tr>
             <tr class="table-info">
                 <td>Delivary Date:</td>
@@ -55,11 +55,16 @@
     </div>
     <div class="col-sm-offset-2 col-sm-1"></div>
 </div>
-    <div class="row col-sm-offset-5" style="margin-right:1px">
-        <button type="button" id="approve" class="btn btn-success" style="@(Model.showbuttons ? "display:block" : "display:none")">Check</button>
-        <button type="button" id="decline" class="btn btn-danger" style="@(Model.showbuttons ? "display:block" : "display:none")">Reject</button>
-        <button type="button" id="warning" class="btn btn-warning" style="@(Model.showbuttons ? "display:block" : "display:none")">Pending</button>
-        <a href="/Invoices/Index?id=1" type="button" id="viewFiles" class="btn btn-info">ViewFiles</a>
+    <div id="buttonsdiv" class="row col-sm-offset-5" style="margin-right:1px">
+        <button type="button" id="approve" class="btn btn-success" style="@(Model.showbuttons ? "display:inline" : "display:none")">Check</button>
+        <button type="button" id="decline" class="btn btn-danger" style="@(Model.showbuttons ? "display:inline" : "display:none")">Revert</button>
+        <button type="button" id="warning" class="btn btn-warning" style="@(Model.showbuttons ? "display:inline" : "display:none")">Hold</button>
+        <a asp-controller="Invoices"
+           asp-action="Index"
+           asp-route-id="@Model.invoiceId"
+           type="button">
+            View Details
+        </a>
     </div>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

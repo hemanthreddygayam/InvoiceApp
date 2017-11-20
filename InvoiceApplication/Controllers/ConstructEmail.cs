@@ -12,7 +12,11 @@ namespace InvoiceApplication.Controllers
 
         public void SendEmail(InvoiceViewModel model,string email)
         {
-            string subject = "Approve ";
+            string subject = String.Format("Approve Invoice for InvoiceNo {0}",model.invoiceNumber);
+            string body = ConstructMessage(model).ToString();
+            string msg = @"mailto:" + email;
+            System.Diagnostics.Process.Start(msg);
+
 
         }
         public StringBuilder ConstructMessage(InvoiceViewModel model)

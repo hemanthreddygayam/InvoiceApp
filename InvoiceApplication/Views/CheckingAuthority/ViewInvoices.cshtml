@@ -65,10 +65,19 @@
                 <td>@item.DueDate.ToShortDateString()</td>
                 <td>@item.CustomerName</td>
                 <td>@item.totalLocalAmount</td>
+                <td>
+                    <a asp-controller="ApproverAuthority"
+                       asp-action="Index"
+                       asp-route-id="@item.invoiceId">
+                        View Details
+                    </a>
+                </td>
 
             </tr>
 
         }
     </tbody>
 </table>
+<script src="~/lib/jquery-ui/jquery-1.10.2.js"></script>
+<script src="~/lib/jquery-ui/ui/jquery.ui.datepicker.js"></script>
 <script type="text/javascript" src="~/js/viewcheckerinvoices.js"></script>

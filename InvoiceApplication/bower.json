@@ -6,9 +6,13 @@
     "jquery-ajax-unobtrusive": "~3.2.4",
     "jquery-validation": "1.17.0",
     "jquery-validation-unobtrusive": "3.2.6",
-    "bootstrap": "3.3.7"
+    "bootstrap": "3.3.7",
+    "eonasdan-bootstrap-datetimepicker": "v4.17.45",
+    "datepicker-moment": "v2.0.2",
+    "jquery-ui": "jquery.ui#1.12.1"
   },
   "resolutions": {
-    "jquery": ">= 1.7.2"
+    "jquery": ">= 1.7.2",
+    "jquery-ui": "1.12.1"
   }
 }

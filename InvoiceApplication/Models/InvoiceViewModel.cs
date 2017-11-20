@@ -20,6 +20,7 @@ namespace InvoiceApplication.Models
         public int customerId { get; set; }
         public string CustomerName { get; set; }
         public DateTime AccountDate { get; set; }
+        public bool showbuttons {get;set;}
    
        
      

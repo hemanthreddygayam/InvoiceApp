@@ -9,7 +9,7 @@ using InvoiceApplication.Models;
 
 using System.Security.Claims;
 using InvoiceApplication.DataAccessLayer;
-
+using System.Net.Mime;
 
 namespace InvoiceApplication.Controllers
 {
@@ -43,7 +43,7 @@ namespace InvoiceApplication.Controllers
             model.currencyCode = invoices.CurrencyCode;
             model.Amount = invoices.TotalAmt;
             model.AccountDate = invoices.AccountDate;
-            if (invoices.InvoiceStatus <= 4)
+            if (invoices.InvoiceStatus >= 4 || invoices.InvoiceStatus == 2)
             {
                 model.showbuttons = true;
             }
@@ -64,21 +64,21 @@ namespace InvoiceApplication.Controllers
             {
                 UpdateStatusForInvoice(model.InvoiceId, model.Status);
                 ViewBag.UpdateMessage = String.Format("Successfully updated status for Invoice:{0}", model.InvoiceId);
-                return View();
+                return new JsonResult("Updated Status sucess fully");
 
             }
             catch (Exception ex)
             {
-
+                new JsonResult("Error in updating status");
             }
-            return View();
+            return new JsonResult("Error in updating status");
         }
 
 
         public void UpdateStatusForInvoice(long invoiceId, string status)
         {
             IDBService service = new DBservice(_helper);
-            var username = ClaimTypes.NameIdentifier;
+            var username = User.FindFirst(ClaimTypes.NameIdentifier).Value; ;
 
 
 

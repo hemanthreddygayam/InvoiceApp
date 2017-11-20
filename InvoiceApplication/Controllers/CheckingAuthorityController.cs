@@ -26,7 +26,6 @@ namespace InvoiceApplication.Controllers
         public IActionResult Index(long invoiceId)
         {
 
-            var username = ClaimTypes.NameIdentifier;
             ViewBag.Name = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             IDBService dbService = new DBservice(_helper);
             var invoices = dbService.GetInvoice(invoiceId);
@@ -62,23 +61,35 @@ namespace InvoiceApplication.Controllers
             {
                 UpdateStatusForInvoice(model.InvoiceId, model.Status);
                 ViewBag.UpdateMessage = String.Format("Successfully updated status for Invoice:{0}", model.InvoiceId);
-                return View();
+                return new JsonResult("Updated Status sucess fully");
 
             }
             catch (Exception ex)
             {
-                
+                new JsonResult("Error in updating status");
             }
-            return View();
+            return new JsonResult("Error in updating status");
         }
 
 
         public void UpdateStatusForInvoice(long invoiceId, string status)
         {
             IDBService service = new DBservice(_helper);
-            var username = ClaimTypes.NameIdentifier;
 
+            var username = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            string email = service.GetEmailForUser(username);
 
+            var invoice = service.GetInvoice(invoiceId);
+            var invoiveViewModel = new InvoiceViewModel
+            {
+                AccountDate = invoice.AccountDate,
+                CustomerName = invoice.CustomerName,
+                DelivaryDate = invoice.DeliveryDate,
+                totalLocalAmount = invoice.TotalLocalAmt,
+                DueDate = invoice.DueDate,
+                invoiceNumber = invoice.InvoiceNo
+
+            };
 
             if (status == "Pending")
             {
@@ -88,6 +99,8 @@ namespace InvoiceApplication.Controllers
             else if (status == "Approved")
             {
                 service.UpdateCheckedStatusForChecker(invoiceId, username);
+                ConstructEmail construct = new ConstructEmail();
+                construct.SendEmail(invoiveViewModel, email);
             }
             else if (status == "Rejected")
             {
@@ -114,7 +127,7 @@ namespace InvoiceApplication.Controllers
                 model.invoiceDate = invoice.AccountDate;
                 model.exchangeRate = invoice.ExRate;
                 model.totalLocalAmount = invoice.TotalLocalAmt;
-
+                list.Add(model);
             }
             return View(list.AsEnumerable());
         }

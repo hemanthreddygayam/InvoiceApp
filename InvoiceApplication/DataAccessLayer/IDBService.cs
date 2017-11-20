@@ -17,8 +17,8 @@ namespace InvoiceApplication.DataAccessLayer
          void UpdateRejectedStatusForApprover(long invoiceId, string username);
          List<DbInvoiceModel> GetAllInvoices(DateTime startDate, DateTime endDate, string status,int numberOfRecords);
          string GetEmailForUser(string username);
-
-
+         List<DbVesselDocument> FetchDocumentsForInvoice(long id);
+         DbVesselDocument FetchFile(int id);
     }
 
     public class DBservice : IDBService
@@ -45,6 +45,20 @@ namespace InvoiceApplication.DataAccessLayer
         {
             string sql = "select top " + numberOfTranscations.ToString() + " InvoiceNo,InvoiceDate,AccountDate,DeliveryDate,DueDate,CurrencyCode,ExRate,CreditTerms,TotalAmt,TotalLocalAmt,CustomerName from BTSInvoiceAR Where AccountDate >= @fromDate and AccountDate < @toDate and ( IsCheckingReverted = 1 or IsApprovalReverted = 1 )";
             return null;
+        }
+
+        public List<DbVesselDocument> FetchDocumentsForInvoice(long id)
+        {
+            string sql = "select FileId,InvoiceId,FilePath,FileName from VesselDocuments Where InvoiceId = @invoiceId";
+            var results = _helper.FetchDocumentDetails(sql, id);
+            return results;
+        }
+
+        public DbVesselDocument FetchFile(int id)
+        {
+            string sql = "select FileId,InvoiceId,FilePath,FileName from VesselDocuments Where FileId = @fileId";
+            var result = _helper.FetchFileDetails(sql, id);
+            return result;
         }
 
         public DbUserModel FetchUser(string userName)
@@ -99,7 +113,7 @@ namespace InvoiceApplication.DataAccessLayer
 
         public string GetEmailForUser(string username)
         {
-            string sql = "select Email from UserEmail Where username= @username and IsActive = 1";
+            string sql = "select Email from UserEmail Where CategoryId= 2 and IsActive = 1";
             var email = _helper.GetEmail(username, sql);
             return email;
         }
@@ -146,5 +160,7 @@ namespace InvoiceApplication.DataAccessLayer
             string sql = "update BTSInvoiceAR set IsWaitingApproval = 0,IsCheckedPending = 0,IsChecked = 0,IsCheckingReverted = 1, InvoiceStatus = 4, CheckedBy = @username,EditBy=@username,EditDate = @currentDate Where Innvoiceid = @invoiceId";
             _helper.UpdateStatusForChecker(invoiceId, 'b',sql);
         }
+
+        
     }
 }

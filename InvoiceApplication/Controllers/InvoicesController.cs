@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using InvoiceApplication.Models;
 using Microsoft.AspNetCore.Http;
 using System.Text.RegularExpressions;
-
+using InvoiceApplication.DataAccessLayer;
 
 namespace InvoiceApplication.Controllers
 {
@@ -18,18 +18,34 @@ namespace InvoiceApplication.Controllers
         
         private TrackingDbContext _context;
         private string _userAgent;
+        public DbHelper _helper;
 
         public InvoicesController(TrackingDbContext context, IHttpContextAccessor httpContext)
         {
             _context = context;
+            _helper = new DbHelper();
             _userAgent = httpContext.HttpContext.Request.Headers["User-Agent"].ToString();
         }
 
         [Authorize]
-        public IActionResult Index(int id = 1)
+        public IActionResult Index(long id = 1)
         {
+
+            IDBService service = new DBservice(_helper);
+            var Roles = User.FindFirst(ClaimTypes.Role).Value;
+
+            var documents = service.FetchDocumentsForInvoice(id);
+            if (Roles == "1")
+                ViewBag.controller = "CheckingAuthority";
+            else
+                ViewBag.controller = "ApproverAuthority";
+
+            if(documents.Count() > 0)
+            {
+                ViewBag.InvoiceId = documents.ElementAt(0).InvoiceId;
+
+            }
             ViewBag.Name = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            IEnumerable<VesselDocuments> documents = _context.VesselDocuments.Where(doc => doc.InvoiceId == id);
             ViewBag.IsMobile = IsMobileDevice();
             return View(documents);
         }
@@ -38,7 +54,15 @@ namespace InvoiceApplication.Controllers
         [HttpPost]
         public JsonResult GetFilePath([FromBody]int id)
         {
-            return Json(_context.VesselDocuments.Find(id));
+            IDBService service = new DBservice(_helper);
+            var Roles = User.FindFirst(ClaimTypes.Role).Value;
+
+            var documents = service.FetchFile(id);
+            if(Roles == "1")
+                ViewBag.controller = "CheckingAuthority";
+            else
+                ViewBag.controller = "ApproverAuthority";
+            return Json(documents);
         }
 
         private Boolean IsMobileDevice()

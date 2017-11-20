@@ -8,10 +8,14 @@
 <h2 class="text-center">Invoice Details</h2>
 <div class="col-sm-12">
 <div class=" col-sm-offset-3 col-sm-6">
-    <table class="table table-striped" style="text-align:center;">
-        <tr id="element" class="table-info">
+    <table id="info" class="table table-striped" style="text-align:center;">
+        <tr id="element" class="table-info" style="display:none">
             <td>Invoice Id:</td>
             <td>@Html.Encode(Model.invoiceId.ToString())</td>
+        </tr>
+        <tr class="table-info">
+            <td>Invoice No:</td>
+            <td>@Html.Encode(Model.invoiceNumber.ToString())</td>
         </tr>
         <tr class="table-info">
             <td>Customer Name:</td>
@@ -19,11 +23,7 @@
         </tr>
         <tr class="table-info">
             <td>Due Date</td>
-            <td>@Html.Encode(Model.DueDate.Date.ToString())</td>
-        </tr>
-        <tr class="table-info">
-            <td>Invoice Id:</td>
-            <td>@Html.Encode(Model.invoiceId.ToString())</td>
+            <td>@Html.Encode(Model.AccountDate.Date.ToString())</td>
         </tr>
         <tr class="table-info">
             <td>Delivary Date:</td>
@@ -50,11 +50,16 @@
     </table>
 </div>
 </div>
-<div class="row col-sm-offset-5" style="margin-right:1px">
-    <button type="button" id="approveCat2" class="btn btn-success" style="@(Model.showbuttons ? "display:block" : "display:none")">Approve</button>
-    <button type="button" id="declineCat2" class="btn btn-danger" style="@(Model.showbuttons ? "display:block" : "display:none")">Reject</button>
-    <button type="button" id="warningCat2" class="btn btn-warning" style="@(Model.showbuttons ? "display:block" : "display:none")">Pending</button>
-    <a  href="/Invoices/Index?id=1" type="button" id="viewFiles" class="btn btn-info">ViewFiles</a>
+<div id="buttuonsdiv" class="row col-sm-offset-5" style="margin-right:1px">
+    <button type="button" id="approveCat2" class="btn btn-success" style="@(Model.showbuttons ? "display:inline" : "display:none")">Approve</button>
+    <button type="button" id="declineCat2" class="btn btn-danger" style="@(Model.showbuttons ? "display:inline" : "display:none")">Revert</button>
+    <button type="button" id="warningCat2" class="btn btn-warning" style="@(Model.showbuttons ? "display:inline" : "display:none")">Hold</button>
+    <a asp-controller="Invoices"
+       asp-action="Index"
+       asp-route-id="@Model.invoiceId"
+       class="btn btn-warning">
+        View Details
+    </a>
 
 </div>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>

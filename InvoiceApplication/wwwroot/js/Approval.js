@@ -57,12 +57,21 @@
         var updateStatus = $.ajax({
             type: "POST",
             url: url1,
-            data: data
+            data: data,
+            sucess: function (data) {
+                alert("Updated Status");
+                $('#info').hide();
+                $('#buttuonsdiv').hide();
+
+            },
+            error: function (data) {
+                alert("Error in updating");
+                $('#info').hide();
+                $('#buttuonsdiv').hide();
+            }
            
         });
-        updateStatus.success(function () {
-            alert("Sucess");
-        })
+        
     }
 
 });

@@ -1,4 +1,7 @@
 ﻿$(document).ready(function () {
+
+    $('#from').datepicker();
+
     $('#searchinvoice').on('click', function () {
         var status = $('#status').val();
         var from = $('#from').val();

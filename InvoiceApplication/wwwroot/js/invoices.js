@@ -2,6 +2,7 @@
     $('.viewfile').on('click', function () {
 
         var id = $(this).attr('id');
+        $("#viewpdf").html('<div class="loader"></div>');
         $.ajax({
             headers: {
                 'Accept': 'application/json',

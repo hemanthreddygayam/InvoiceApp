@@ -86,3 +86,8 @@
         transform: rotate(360deg);
     }
 }
+@media (min-width:1025px) {
+    .container-fluid {
+        width: 100% !important;
+    }
+}

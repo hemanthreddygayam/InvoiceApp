@@ -1,5 +1,4 @@
 ﻿using InvoiceApplication.DataAccessLayer;
-using InvoiceApplication.DbModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;

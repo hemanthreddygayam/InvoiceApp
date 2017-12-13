@@ -16,7 +16,7 @@
                 console.log(response);
                 console.log(response.fileName);
                 var filepath = response.filePath + response.fileName;
-                $("#viewpdf").html('<embed class="viewer" src="' + filepath + '" />');
+                $("#viewpdf").html('<embed class="viewer" src="/./Invoices/GetFileMemoryStream/?path=' + filepath + '" />');
                 console.log(navigator.userAgent);
             },
             error: function (response) {

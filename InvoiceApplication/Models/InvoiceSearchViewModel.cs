@@ -8,9 +8,10 @@ namespace InvoiceApplication.Models
     public class InvoiceSearchViewModel
     {
         public string Status { get; set; }
-        public DateTime From { get; set; }
-        public DateTime To { get; set; }
+        public string From { get; set; }
+        public string To { get; set; }
         public int Results { get; set; }
         public int Page { get; set; }
     }
+   
 }

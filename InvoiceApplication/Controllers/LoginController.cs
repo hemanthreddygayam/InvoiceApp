@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using InvoiceApplication.DbModels;
 using InvoiceApplication.Services;
 using InvoiceApplication.Models;
 using System.Security.Claims;
@@ -16,12 +15,10 @@ namespace InvoiceApplication.Controllers
 {
     public class LoginController : Controller
     {
-        private TrackingDbContext _context;
         private IUserService _userService;
 
-        public LoginController(TrackingDbContext context, IUserService userService)
+        public LoginController( IUserService userService)
         {
-            _context = context;
             _userService = userService;
         }
 
@@ -42,6 +39,13 @@ namespace InvoiceApplication.Controllers
         //[ValidateAntiForgeryToken]
         public async Task<IActionResult> SignIn(SignIn model, string returnUrl=null)
         {
+
+            InvoiceSearchViewModel searchModel = new InvoiceSearchViewModel();
+            searchModel.Results = 0;
+            searchModel.Status = "pending";
+            searchModel.From = string.Empty;
+            searchModel.To = string.Empty;
+
             if (ModelState.IsValid)
             {
                 DbUserModel user;
@@ -52,7 +56,29 @@ namespace InvoiceApplication.Controllers
                     {
                         return Redirect(returnUrl);
                     }
-                    return RedirectToAction("Index", "Home");
+                   
+                    if (user.CategoryId == 1)
+                    {
+                       
+                        return RedirectToAction("ViewInvoices", "CheckingAuthority",searchModel);
+
+                    }
+                    else if(user.CategoryId == 2)
+                    {
+                        return RedirectToAction("ViewInvoices", "ApproverAuthority",searchModel);
+
+                    }
+                }
+                var roles = User.FindFirst(ClaimTypes.Role).Value;
+                if(roles == "1")
+                {
+                    return RedirectToAction("ViewInvoices", "CheckingAuthority", searchModel);
+
+                }
+                else if(roles == "2")
+                {
+                    return RedirectToAction("ViewInvoices", "ApproverAuthority", searchModel);
+
                 }
             }
             return View(model);

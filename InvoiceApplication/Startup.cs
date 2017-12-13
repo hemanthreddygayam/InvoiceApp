@@ -6,12 +6,11 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using InvoiceApplication.DbModels;
-using Microsoft.EntityFrameworkCore;
 using InvoiceApplication.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace InvoiceApplication
 {
@@ -28,7 +27,6 @@ namespace InvoiceApplication
         public void ConfigureServices(IServiceCollection services)
         {
             var connection = Configuration.GetConnectionString("EMSDatabase");
-            services.AddDbContext<TrackingDbContext>(options => options.UseSqlServer(connection));
             services.AddMvc();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthorizationHandler, IsApprovingAuthority>();

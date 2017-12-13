@@ -1,5 +1,4 @@
 ﻿using InvoiceApplication.DataAccessLayer;
-using InvoiceApplication.DbModels;
 using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;

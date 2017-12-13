@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace InvoiceApplication.DataAccessLayer
 {
@@ -40,6 +37,7 @@ namespace InvoiceApplication.DataAccessLayer
         public DateTime? EditDate { get; set; }
         public int InvoiceStatus { get; set; }
         public int InvStatus { get; set; }
+        public string VesselName { get; set; }
         }
     
 }

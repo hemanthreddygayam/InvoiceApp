@@ -12,10 +12,10 @@ namespace InvoiceApplication.Controllers
 
         public void SendEmail(InvoiceViewModel model,string email)
         {
-            string subject = String.Format("Approve Invoice for InvoiceNo {0}",model.invoiceNumber);
+            string subject = String.Format("Approve Invoice for InvoiceNo {0}",model.InvoiceNumber);
             string body = ConstructMessage(model).ToString();
             string msg = @"mailto:" + email;
-            System.Diagnostics.Process.Start(msg);
+           // System.Diagnostics.Process.Start(msg);
 
 
         }
@@ -29,7 +29,7 @@ namespace InvoiceApplication.Controllers
 
             messge.Append("<tr>");
             messge.Append("<td>Invoice Number</td>");
-            messge.Append(String.Format("<td>{0}</td>", model.invoiceNumber));
+            messge.Append(String.Format("<td>{0}</td>", model.InvoiceNumber));
             messge.Append("</tr>");
 
             messge.Append("<tr>");
@@ -44,12 +44,12 @@ namespace InvoiceApplication.Controllers
 
             messge.Append("<tr>");
             messge.Append("<td>Delivary Date</td>");
-            messge.Append(String.Format("<td>{0}</td>", model.DelivaryDate.Date.ToString()));
+            messge.Append(String.Format("<td>{0}</td>", model.DelivaryDate));
             messge.Append("</tr>");
 
             messge.Append("<tr>");
             messge.Append("<td>Total Amount</td>");
-            messge.Append(String.Format("<td>{0}</td>", model.totalLocalAmount.ToString()));
+            messge.Append(String.Format("<td>{0}</td>", model.TotalLocalAmount.ToString()));
             messge.Append("</tr>");
             string url = "";
             messge.Append("</table>");

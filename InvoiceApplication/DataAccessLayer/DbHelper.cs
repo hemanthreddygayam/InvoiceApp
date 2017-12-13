@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,18 +11,21 @@ namespace InvoiceApplication.DataAccessLayer
     public class DbHelper
     {
         private IConfiguration _configuration;
+        public string DbString;
 
         
         public DbHelper()
-        { }
-        public DbHelper(IConfiguration configuration)
         {
-            this._configuration = configuration;
+            var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json");
+            this._configuration = builder.Build();
+            DbString = _configuration.GetConnectionString("EMSDatabase");
         }
+        
 
         public DbUserModel FetchUser(string userName,string sql)
         {
-            using (var connection = new SqlConnection("Server=LAPTOP-D8N1NPGG\\MSSQLSERVER1;Database=iCPMS_OMTI_FZ;Integrated Security=True;"))
+            using (var connection = new SqlConnection(DbString))
             {
                 var command = new SqlCommand(sql, connection);
                 command.Parameters.Add(new SqlParameter("userName", userName));
@@ -46,7 +50,7 @@ namespace InvoiceApplication.DataAccessLayer
         public string GetEmail(string username, string sql)
         {
             string email = null;
-            using (var connection = new SqlConnection("Server=LAPTOP-D8N1NPGG\\MSSQLSERVER1;Database=iCPMS_OMTI_FZ;Integrated Security=True;"))
+            using (var connection = new SqlConnection(DbString))
             {
                 var command = new SqlCommand(sql, connection);
                 command.Parameters.Add(new SqlParameter("username", username));
@@ -65,28 +69,29 @@ namespace InvoiceApplication.DataAccessLayer
             return email;
         }
 
-        public int UpdateStatusForChecker(long invoiceId, char username,string sql)
+        public int UpdateStatusForChecker(long invoiceId, char username,string sql,string remarks)
         {
             int status = 0;
             try
             {
-                using (var connection = new SqlConnection("Server=LAPTOP-D8N1NPGG\\MSSQLSERVER1;Database=iCPMS_OMTI_FZ;Integrated Security=True;"))
+                using (var connection = new SqlConnection(DbString))
                 {
                     var command = new SqlCommand(sql, connection);
                     command.Parameters.Add(new SqlParameter("invoiceId", invoiceId));
                     command.Parameters.Add(new SqlParameter("currentDate", DateTime.Now));
                     command.Parameters.Add(new SqlParameter("username", username));
+                    command.Parameters.Add(new SqlParameter("remarks", remarks));
+
 
                     connection.Open();
                     status = command.ExecuteNonQuery();
-                    command.Dispose();
-                    return status;
+                    
                 }
-
-            }
-            catch(Exception ex)
-            {
                 return status;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Update not sucessfull");
 
             }
 
@@ -95,7 +100,7 @@ namespace InvoiceApplication.DataAccessLayer
         public List<DbVesselDocument> FetchDocumentDetails(string sql, long id)
         {
             List<DbVesselDocument> documents = new List<DbVesselDocument>();
-            using (var connection = new SqlConnection("Server=LAPTOP-D8N1NPGG\\MSSQLSERVER1;Database=iCPMS_OMTI_FZ;Integrated Security=True;"))
+            using (var connection = new SqlConnection(DbString))
             {
                 var command = new SqlCommand(sql, connection);
                 command.Parameters.Add(new SqlParameter("invoiceId", id));
@@ -123,7 +128,7 @@ namespace InvoiceApplication.DataAccessLayer
         public  DbVesselDocument FetchFileDetails(string sql, int id)
         {
             DbVesselDocument doc = null;
-            using (var connection = new SqlConnection("Server=LAPTOP-D8N1NPGG\\MSSQLSERVER1;Database=iCPMS_OMTI_FZ;Integrated Security=True;"))
+            using (var connection = new SqlConnection(DbString))
             {
                 var command = new SqlCommand(sql, connection);
                 command.Parameters.Add(new SqlParameter("fileId", id));
@@ -151,7 +156,7 @@ namespace InvoiceApplication.DataAccessLayer
         public List<DbInvoiceModel> GetInvoices(string sql, DateTime startDate, DateTime endDate)
         {
             List<DbInvoiceModel> invoices = new List<DbInvoiceModel>();
-            using (var connection = new SqlConnection("Server=LAPTOP-D8N1NPGG\\MSSQLSERVER1;Database=iCPMS_OMTI_FZ;Integrated Security=True;"))
+            using (var connection = new SqlConnection(DbString))
             {
                 var command = new SqlCommand(sql, connection);
                 if (startDate != DateTime.MinValue)
@@ -180,12 +185,12 @@ namespace InvoiceApplication.DataAccessLayer
                             model.CurrencyCode = (string)reader["CurrencyCode"];
                             model.CustomerName = (string)reader["CustomerName"];
                             model.AccountDate = reader.GetFieldValue<DateTime>(reader.GetOrdinal("AccountDate"));
-                            model.DueDate = reader.GetFieldValue<DateTime>(reader.GetOrdinal("DueDate"));
                             model.DeliveryDate = reader.GetFieldValue<DateTime>(reader.GetOrdinal("DeliveryDate"));
+                            model.DueDate = reader.GetFieldValue<DateTime>(reader.GetOrdinal("DueDate"));
                             model.TotalAmt = (decimal)reader["TotalAmt"];
                             model.TotalLocalAmt = (decimal)reader["TotalLocalAmt"];
-                            model.InvoiceDate = reader.GetFieldValue<DateTime>(reader.GetOrdinal("InvoiceDate"));
                             model.ExRate = (int)reader["ExRate"];
+                            model.VesselName = (string)reader["VesselName"];
                             invoices.Add(model);
                         }
                     }
@@ -198,7 +203,7 @@ namespace InvoiceApplication.DataAccessLayer
 
         public  DbInvoiceModel GetInvoiceDetails(long invoiceId, string sql)
         {
-            using (var connection = new SqlConnection("Server=LAPTOP-D8N1NPGG\\MSSQLSERVER1;Database=iCPMS_OMTI_FZ;Integrated Security=True;"))
+            using (var connection = new SqlConnection(DbString))
             {
                 var command = new SqlCommand(sql, connection);
                 command.Parameters.Add(new SqlParameter("invoiceId", invoiceId));
@@ -214,15 +219,12 @@ namespace InvoiceApplication.DataAccessLayer
                         model.InvoiceNo = (string)reader["InvoiceNo"];
                         model.CurrencyCode = (string)reader["CurrencyCode"];
                         model.CustomerName = (string)reader["CustomerName"];
-                        model.InvoiceDate = reader.GetFieldValue<DateTime>(reader.GetOrdinal("InvoiceDate"));
                         model.AccountDate = reader.GetFieldValue<DateTime>(reader.GetOrdinal("AccountDate"));
-                        model.DueDate = reader.GetFieldValue<DateTime>(reader.GetOrdinal("DueDate"));
                         model.DeliveryDate = reader.GetFieldValue<DateTime>(reader.GetOrdinal("DeliveryDate"));
                         model.TotalAmt = (decimal)reader["TotalAmt"];
                         model.TotalLocalAmt = (decimal)reader["TotalLocalAmt"];
-                        model.InvoiceDate = reader.GetFieldValue<DateTime>(reader.GetOrdinal("InvoiceDate"));
                         model.ExRate = (int)reader["ExRate"];
-                        model.CreditTerms = (string)reader["CreditTerms"];
+                        model.VesselName = (string)reader["VesselName"];
                         model.InvoiceStatus = (int)reader["InvoiceStatus"];
 
                         return model;
@@ -230,6 +232,27 @@ namespace InvoiceApplication.DataAccessLayer
                 }
             }
             return null;
+        }
+
+        public string GetColor(string sql, int status)
+        {
+            string color = string.Empty;
+            using (var connection = new SqlConnection(DbString))
+            {
+                var command = new SqlCommand(sql, connection);
+                command.Parameters.Add(new SqlParameter("statusId", status));
+
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+
+                    while (reader.Read())
+                    {
+                        color = (string)reader["color"];
+                    }
+                }
+            }
+            return color;
         }
     }
 }

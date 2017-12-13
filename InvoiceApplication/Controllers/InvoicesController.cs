@@ -4,9 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using InvoiceApplication.DbModels;
 using Microsoft.AspNetCore.Authorization;
-using InvoiceApplication.Models;
 using Microsoft.AspNetCore.Http;
 using System.Text.RegularExpressions;
 using InvoiceApplication.DataAccessLayer;
@@ -16,13 +14,11 @@ namespace InvoiceApplication.Controllers
     public class InvoicesController : Controller
     {
         
-        private TrackingDbContext _context;
         private string _userAgent;
         public DbHelper _helper;
 
-        public InvoicesController(TrackingDbContext context, IHttpContextAccessor httpContext)
+        public InvoicesController(IHttpContextAccessor httpContext)
         {
-            _context = context;
             _helper = new DbHelper();
             _userAgent = httpContext.HttpContext.Request.Headers["User-Agent"].ToString();
         }
@@ -70,6 +66,12 @@ namespace InvoiceApplication.Controllers
             Regex regex = new Regex(@"(iPhone|Android|iPad|Mobile|iPod|webOS|BlackBerry|Windows Phone)");
             Match match = regex.Match(_userAgent);
             return match.Success;
+        }
+
+        [HttpGet]
+        public ActionResult GetFileMemoryStream(string path)
+        {
+            return PhysicalFile(path, "application/pdf");
         }
     }
 }

@@ -12,42 +12,35 @@
 </head>
 <body>
 
-    <div id="heading" class="jumbotron">
-        <div class="container text-center">
-            <h2>Invoice Mangement</h2>
-            <!--<p>Manage employee invoices</p>-->
+    <div class="container-fluid">
+        <div id="heading" class="row">
+            <div class="text-center">
+                <h2>Invoice Management</h2>
+                @if (User.Identity.IsAuthenticated)
+            {
+                    <div class="col-sm-offset-6 col-sm-3"></div>
+                    <div class="col-sm-2"><span><i class="glyphicon glyphicon-user"></i>&nbsp;&nbsp;Welcome, &nbsp;&nbsp;@ViewBag.Name</span></div>
+                    <div class="col-sm-1"><a class="anchor" href="@Url.Action("SignOut", "Login")">Signout</a></div>
+
+                }
+
+            </div>
+        </div>
+        <div>
             @if (User.Identity.IsAuthenticated)
             {
-                <div class="col-sm-offset-6 col-sm-3"></div>
-                <div class="col-sm-2"><span><i class="glyphicon glyphicon-user"></i>&nbsp;&nbsp;Welcome, &nbsp;&nbsp;@ViewBag.Name</span></div>
-                <div class="col-sm-1"><a class="anchor" href="@Url.Action("SignOut", "Login")">Signout</a></div>
-                
+
+
+                <div class="container-fluid">
+                    @RenderBody()
+                </div>
             }
-                    
+            else
+            {
+                @RenderBody()
+            }
         </div>
     </div>
-    <div>
-        @if (User.Identity.IsAuthenticated)
-        {
-            <!--
-            <div class="col-sm-2">
-                <ul class="nav nav-pills nav-stacked">
-                    <li><a href="/ApprovedPretravelClaim/Index">Approved PreTravel Claims</a></li>
-                    <li><a href="/PretravelClaim/Index">Add TravelClaim</a></li>
-                    <li><a href="/TravelClaimApprover/Index">Add TravelClaim</a></li>
-                    <li><a href="/Login/SignOut">Sign Out</a></li>
-                </ul>
-            </div>
-            -->
 
-            <div class="col-sm-12">
-                @RenderBody()
-            </div>
-        }
-        else
-        {
-            @RenderBody()
-        }
-    </div>
 </body>
 </html>

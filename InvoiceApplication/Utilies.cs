@@ -7,7 +7,7 @@ namespace InvoiceApplication
 {
     public class Utilies
     {
-        public enum Status
+        public enum InvoiceStatus
         {
             WaitingApproval = 1,Checked,CheckPending,CheckRejected,Approved,ApprovePending,ApproveRejected,Rejected
         }

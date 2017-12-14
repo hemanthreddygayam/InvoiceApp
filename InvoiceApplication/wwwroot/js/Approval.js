@@ -96,6 +96,7 @@
             Status: status,
             Remarks : remarks
         }
+        $('#errorMessages').html("");
         $.ajax({
             headers: {
                 'Accept': 'application/json'

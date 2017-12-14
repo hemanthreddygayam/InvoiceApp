@@ -72,6 +72,18 @@ namespace InvoiceApplication.Controllers
         public ActionResult GetFileMemoryStream(string path)
         {
             return PhysicalFile(path, "application/pdf");
+
+        }
+
+        public IActionResult Redirect()
+        {
+            var Roles = User.FindFirst(ClaimTypes.Role).Value;
+            if (Roles == "1")
+                return Redirect("/CheckingAuthority/ViewInvoices");
+            else if (Roles == "2")
+                return Redirect("/ApproverAuthority/ViewInvoices");
+            else
+                return Redirect("");
         }
     }
 }

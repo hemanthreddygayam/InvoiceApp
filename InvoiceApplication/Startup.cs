@@ -80,7 +80,7 @@ namespace InvoiceApplication
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Invoices}/{action=Index}/{id?}");
+                    template: "{controller=Invoices}/{action=Redirect}/");
             });
         }
     }

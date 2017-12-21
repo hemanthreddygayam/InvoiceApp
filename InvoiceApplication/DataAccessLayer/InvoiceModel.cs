@@ -19,9 +19,6 @@ namespace InvoiceApplication.DataAccessLayer
         public int CustomerId { get; set; }
         public string CustomerCode { get; set; }
         public string CustomerName { get; set; }
-        public string BillingAddress1 { get; set; }
-        public string BillingAddress2 { get; set; }
-        public string BillingCountry { get; set; }
         public bool? IsWaitingApproval { get; set; }
         public bool? IsChecked { get; set; }
         public bool? IsCheckedPending { get; set; }
@@ -38,6 +35,7 @@ namespace InvoiceApplication.DataAccessLayer
         public int InvoiceStatus { get; set; }
         public int InvStatus { get; set; }
         public string VesselName { get; set; }
+        public string Remarks { get; set; }
         }
     
 }

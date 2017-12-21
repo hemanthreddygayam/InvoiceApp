@@ -1,8 +1,14 @@
 ﻿$(document).ready(function () {
 
     $("#datetimepicker1").datetimepicker({
+        format: "D/M/Y" // "Sunday, February 14th 2010, 3:25:50 pm"
+
+
     });
     $("#datetimepicker2").datetimepicker({
+        format: "D/M/Y" // "Sunday, February 14th 2010, 3:25:50 pm"
+
+
     });
 
         //$('.page').on('click', function () {

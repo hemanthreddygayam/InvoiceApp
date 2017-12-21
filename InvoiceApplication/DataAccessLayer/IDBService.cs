@@ -118,6 +118,7 @@ namespace InvoiceApplication.DataAccessLayer
             }
             if(endDate != DateTime.MinValue)
             {
+                endDate = endDate.AddDays(1);
                 sql += " AND ( AccountDate < @EndDate ) ";
             }
             sql += " ORDER BY InvStatus ASC, AccountDate DESC ";
@@ -136,7 +137,7 @@ namespace InvoiceApplication.DataAccessLayer
 
         public DbInvoiceModel GetInvoice(long invoiceId)
         {
-            string sql = "select InvoiceId,InvoiceNo,AccountDate,DeliveryDate,CurrencyCode,ExRate,TotalAmt,TotalLocalAmt,CustomerName, VesselName, InvoiceStatus from BTSInvoiceAR Where InvoiceId = @invoiceId";
+            string sql = "select InvoiceId,InvoiceNo,AccountDate,DeliveryDate,CurrencyCode,ExRate,TotalAmt,TotalLocalAmt,CustomerName, VesselName, InvoiceStatus, remarks from BTSInvoiceAR Where InvoiceId = @invoiceId";
             var invoice = _helper.GetInvoiceDetails(invoiceId,sql);
             return invoice;
         }
@@ -150,7 +151,8 @@ namespace InvoiceApplication.DataAccessLayer
         public void UpdateCheckedStatusForChecker(long invoiceId, string username,string remarks)
         {
             string sql = "update BTSInvoiceAR set IsWaitingApproval = 1,IsChecked = 1,IsCheckedPending = 0, InvoiceStatus = 2,CheckedBy = @username,EditBy=@username,EditDate = @currentDate, Remarks = @remarks Where InvoiceId = @invoiceId";
-            _helper.UpdateStatusForChecker(invoiceId, 'b', sql, remarks);
+            _helper.UpdateStatusForChecker(invoiceId, 'b', sql, remarks); 	
+
         }
 
         public void UpdatePendingStatusForApprover(long invoiceId, string username,string remarks)

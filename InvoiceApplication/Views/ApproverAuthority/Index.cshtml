@@ -15,26 +15,31 @@
     };
 }
 <div class="row">
-    <div col="sm-6">
-        <a asp-controller="ApproverAuthority"
-           asp-action="ViewInvoices"
-            asp-all-route-data="routeValues">
-            View Invoices
-        </a>
+    <div class="col-lg-2">
+        <ul class="list-group">
+            <li class="list-group-item">
+                <a asp-controller="ApproverAuthority"
+                   asp-action="ViewInvoices"
+                   asp-all-route-data="routeValues">
+                    View Invoices
+                </a>
+            </li>
+        </ul>
     </div>
-   <div col="sm-6">
-       <h2 class="text-center">Invoice Details</h2>
 
-   </div>
-    <div class="col-md-offset-7 col-lg-offset-7" style="font-size: 30px;">
+    <div class="col-lg-6">
+        <h2 class="text-center">Invoice Details</h2>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-offset-3 col-sm-6" style="font-size: 20px;">
         <label>Current Status</label>
         <span id="statuslabel">
             @Html.Encode(Model.InvoiceStatus)
         </span>
     </div>
-    
-   
 </div>
+    
 <div class="col-md-offset-7" id="errorMessages">
 </div>
 <div class="row">
@@ -87,10 +92,22 @@
                     <td><b>No Of Documents</b></td>
                     <td>@Html.Encode(Model.NoOfDocuments.ToString())</td>
                 </tr>
-                <tr class="table-info">
-                    <td><b>Remarks</b></td>
-                    <td><textarea rows="2" cols="50" id="remarks"></textarea></td>
-                </tr>
+                @{
+                    if (Model.Showbuttons)
+                    {
+                        <tr>
+                            <td><b>Remarks</b></td>
+                            <td><textarea  asp-for="Remarks" rows="2" cols="50" id="remarks"></textarea></td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <td><b>Remarks</b></td>
+                            <td>@Model.Remarks</td>
+                        </tr>
+                    }
+                }
             </table>
         </div>
     </div>
@@ -107,5 +124,7 @@
     </a>
 
 </div>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/js/Approval.js"></script>

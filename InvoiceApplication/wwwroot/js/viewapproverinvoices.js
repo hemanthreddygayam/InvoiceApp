@@ -1,8 +1,10 @@
 ﻿$(document).ready(function () {
 
     $("#datetimepicker1").datetimepicker({
+        format: "D/M/Y"
     });
     $("#datetimepicker2").datetimepicker({
+        format: "D/M/Y"
     });
 
     //$('#searchinvoice').on('click', function () {

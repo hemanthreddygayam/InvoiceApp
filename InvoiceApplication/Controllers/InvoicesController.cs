@@ -77,13 +77,29 @@ namespace InvoiceApplication.Controllers
 
         public IActionResult Redirect()
         {
-            var Roles = User.FindFirst(ClaimTypes.Role).Value;
-            if (Roles == "1")
-                return Redirect("/CheckingAuthority/ViewInvoices");
-            else if (Roles == "2")
-                return Redirect("/ApproverAuthority/ViewInvoices");
+            if(User != null)
+            {
+                if(User.FindFirst(ClaimTypes.Role) != null)
+                {
+                    var Roles = User.FindFirst(ClaimTypes.Role).Value;
+                    if (Roles == "1")
+                        return Redirect("/CheckingAuthority/ViewInvoices");
+                    else if (Roles == "2")
+                        return Redirect("/ApproverAuthority/ViewInvoices");
+                    else
+                        return Redirect("");
+                }
+                else
+                {
+                    return Redirect("/Login/SignIn");
+                }
+                
+            }
             else
-                return Redirect("");
+            {
+                return Redirect("/Login/SignIn");
+            }
+           
         }
     }
 }

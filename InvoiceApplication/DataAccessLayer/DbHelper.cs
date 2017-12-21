@@ -161,13 +161,13 @@ namespace InvoiceApplication.DataAccessLayer
                 var command = new SqlCommand(sql, connection);
                 if (startDate != DateTime.MinValue)
                 {
-                    DateTime start = (DateTime)startDate;
+                    DateTime start = (DateTime)startDate.Date;
                     command.Parameters.Add(new SqlParameter("@StartDate", startDate));
 
                 }
                 if (endDate != DateTime.MinValue)
                 {
-                    DateTime end = (DateTime)endDate;
+                    DateTime end = (DateTime)endDate.Date;
                     command.Parameters.Add(new SqlParameter("@EndDate", endDate));
 
                 }
@@ -226,6 +226,7 @@ namespace InvoiceApplication.DataAccessLayer
                         model.ExRate = (int)reader["ExRate"];
                         model.VesselName = (string)reader["VesselName"];
                         model.InvoiceStatus = (int)reader["InvoiceStatus"];
+                        model.Remarks = reader["remarks"] != DBNull.Value ? (string)reader["remarks"] : string.Empty;
 
                         return model;
                     }

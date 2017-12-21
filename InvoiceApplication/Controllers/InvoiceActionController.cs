@@ -30,6 +30,10 @@ namespace InvoiceApplication.Controllers
             }
             try
             {
+                if(model.Remarks == null)
+                {
+                    model.Remarks = string.Empty;
+                }
                 string color = UpdateStatusForInvoice(model.InvoiceId, model.Status,model.Remarks);
                 ViewBag.UpdateMessage = String.Format("Successfully updated status for Invoice:{0}", model.InvoiceId);
 
@@ -120,6 +124,10 @@ namespace InvoiceApplication.Controllers
             }
             try
             {
+                if (model.Remarks == null)
+                {
+                    model.Remarks = string.Empty;
+                }
                 string color = UpdateStatusForInvoice(model.InvoiceId, model.Status,model.Remarks);
                 ViewBag.UpdateMessage = String.Format("Successfully updated status for Invoice:{0}", model.InvoiceId);
                 return new JsonResult(color);

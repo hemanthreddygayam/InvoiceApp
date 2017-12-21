@@ -21,6 +21,7 @@ namespace InvoiceApplication.Models
         public bool Showbuttons {get;set;}
         public int NoOfDocuments { get; set; }
         public string InvoiceStatus { get; set; }
+        public string Remarks { get; set; }
    
        
      

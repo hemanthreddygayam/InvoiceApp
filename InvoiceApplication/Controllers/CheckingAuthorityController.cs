@@ -45,6 +45,7 @@ namespace InvoiceApplication.Controllers
                                                 CultureInfo.CreateSpecificCulture("en-IN"));
             model.InvoiceStatus = invStatus.ToString();
             model.NoOfDocuments = numberOfDocs != null ?numberOfDocs.Count : 0;
+            model.Remarks = invoices.Remarks;
             if(invoices.InvoiceStatus <= 4)
             {
                 model.Showbuttons = true;
@@ -62,14 +63,22 @@ namespace InvoiceApplication.Controllers
             {
                 model1.Status = "pending";
             }
-            if (model1.From != "" || model1.From != string.Empty)
+            if(model1.From != null)
             {
-                from = Convert.ToDateTime(model1.From);
+                if (model1.From != "" || model1.From != string.Empty )
+                {
+                    from = DateTime.Parse(model1.From, new CultureInfo("zh-SG"));
+                }
             }
-            if (model1.To != "" || model1.To != string.Empty)
+            if(model1.To != null)
             {
-                to = Convert.ToDateTime(model1.To);
+                if (model1.To != "" || model1.To != string.Empty)
+                {
+                    to = DateTime.Parse(model1.To, new CultureInfo("zh-SG"));
+                }
             }
+            
+            
             var userRole = "";
             var role = User.FindFirst(ClaimTypes.Role).Value;
             if(role == "1")
@@ -115,13 +124,19 @@ namespace InvoiceApplication.Controllers
         {
             DateTime from = DateTime.MinValue;
             DateTime to = DateTime.MinValue;
-            if (model1.From != "" || model1.From != string.Empty)
+            if (model1.From != null)
             {
-                from = Convert.ToDateTime(model1.From);
+                if (model1.From != "" || model1.From != string.Empty)
+                {
+                    from = DateTime.Parse(model1.From, new CultureInfo("zh-SG"));
+                }
             }
-            if (model1.To != "" || model1.To != string.Empty)
+            if (model1.To != null)
             {
-                to = Convert.ToDateTime(model1.To);
+                if (model1.To != "" || model1.To != string.Empty)
+                {
+                    to = DateTime.Parse(model1.To, new CultureInfo("zh-SG"));
+                }
             }
             var userRole = "";
             var role = User.FindFirst(ClaimTypes.Role).Value;
@@ -146,6 +161,7 @@ namespace InvoiceApplication.Controllers
                 model.InvoiceId = invoice.InvoiceId;
                 model.InvoiceNo = invoice.InvoiceNo;
                 model.AccountDate = invoice.AccountDate.ToString("dd/M/yyyy", CultureInfo.InvariantCulture);
+                model.DueDate = invoice.DueDate.ToString("dd/M/yyyy", CultureInfo.InvariantCulture);
                 model.CurrencyCode = invoice.CurrencyCode;
                 model.CustomerName = invoice.CustomerName;
                 model.VesselName = invoice.VesselName;

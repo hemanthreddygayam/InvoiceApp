@@ -26,7 +26,8 @@
         var remarks = $("#remarks").val();
         if (remarks.length <= 0)
         {
-            $('#errorMessages').html("Please enter remarks");
+            toastr.options.positionClass = 'toast-bottom-right';
+            toastr.error('Remarks are required for Revert Status');
         }
         else {
             doPostcall(invoiceId, status, url, remarks);
@@ -40,7 +41,8 @@
         var remarks = $("#remarks").val();
 
         if (remarks.length <= 0) {
-            $('#errorMessages').html("Please enter remarks");
+            toastr.options.positionClass = 'toast-bottom-right';
+            toastr.error('Remarks are required for pending Status');
         }
         else {
             doPostcall(invoiceId, status, url, remarks);
@@ -67,7 +69,8 @@
         var url = "/InvoiceAction/Approve";
         var remarks = $("#remarks").val();
         if (remarks.length <= 0) {
-            $('#errorMessages').html("Please enter remarks");
+            toastr.options.positionClass = 'toast-bottom-right';
+            toastr.error('Remarks are required for Revert Status');
         }
         else {
             doPostcall(invoiceId, status, url, remarks);
@@ -80,7 +83,8 @@
         var url = "/InvoiceAction/Approve";
         var remarks = $("#remarks").val();
         if (remarks.length <= 0) {
-            $('#errorMessages').html("Please enter remarks");
+            toastr.options.positionClass = 'toast-bottom-right';
+            toastr.error('Remarks are required for pending Status');
         }
         else {
             doPostcall(invoiceId, status, url, remarks);
@@ -107,10 +111,26 @@
             success: function (data) {
                 $('#statuslabel').html(status);
                 $('#statuslabel').css("background-color", data);
+                if (status === "Approved" || status == "Checked")
+                {
+                    toastr.options.positionClass = 'toast-bottom-right';
+                    toastr.success('Updated InvoiceStatus');
+                }
+                else if (status === "ApprovePending" || status === "CheckPending")
+                {
+                    toastr.options.positionClass = 'toast-bottom-right';
+                    toastr.warning('Updated Invoice Status to Pending');
+                }
+                else {
+                    toastr.options.positionClass = 'toast-bottom-right';
+                    toastr.error('Updated Invoice Status to Rejected');
+                }
+                
+
             },
             error: function (data) {
-                alert("Error in updating");
-            }
+                toastr.options.positionClass = 'toast-bottom-right';
+                toastr.error('Error in updating Invoice Status');            }
 
         });
 
